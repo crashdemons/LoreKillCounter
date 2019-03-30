@@ -1,0 +1,34 @@
+name: LoreKillCounter
+main: com.github.crashdemons.lorekillcounter.LoreKillCounter
+version: ${project.version}
+author: crashdemons
+api-version: 1.13
+description: Adds killcounters to items using loretext
+website: https://github.com/crashdemons
+
+
+
+
+commands:
+  LoreKillCounter:
+    description: Add or remove a couunter to an item
+    aliases: [lkc,counter]
+    
+permissions:
+  lorekillcounter.*:
+    description: Gives all LoreKillCounter permissions
+    default: false
+    children:
+      lorekillcounter.counted: true
+      lorekillcounter.modify: true
+#  lorekillcounter.config.reload:
+#    description: Allows user to reload configs
+#    default: op
+  lorekillcounter.modify:
+    description: Allows modifying the counters on items with
+    default: op
+
+  lorekillcounter.counted:
+    description: User receives item counts
+    default: true
+
