@@ -160,6 +160,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         if(killer==null) return;
         //getLogger().info(" killer exists");
         if(!(killer instanceof Player)) return;
+        if(!killer.hasPermission("lorekillcounter.counted")) return;
         //getLogger().info(" killer player");
         CounterType deathType = CounterType.fromEntityDeath(killed);
         
