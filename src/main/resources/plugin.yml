@@ -1,7 +1,7 @@
 name: LoreKillCounter
 main: com.github.crashdemons.lorekillcounter.LoreKillCounter
 version: ${project.version}
-author: crashdemons
+authors: [crashdemons,SikaNZ]
 api-version: 1.13
 description: Adds killcounters to items using loretext
 website: https://github.com/crashdemons
