@@ -7,13 +7,13 @@ package com.github.crashdemons.lorekillcounter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class LoreKillCounter extends JavaPlugin implements Listener{
 
-    private final Random rand = new Random();
+    //private final Random rand = new Random();
     
 
     
@@ -151,14 +151,25 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         return false;
     }
     
+    @EventHandler(ignoreCancelled=true)
     public void onEntityDeathEvent(EntityDeathEvent event){
+        
+        //getLogger().info("LKC death event ");
         LivingEntity killed = event.getEntity();
         Player killer = event.getEntity().getKiller();
         if(killer==null) return;
+        //getLogger().info(" killer exists");
         if(!(killer instanceof Player)) return;
+        //getLogger().info(" killer player");
         CounterType deathType = CounterType.fromEntityDeath(killed);
         
+        //getLogger().info("deathType = "+deathType);
+        
+        if(deathType == null || deathType == CounterType.INVALID) return;
+       // getLogger().info(" counter valid");
+        
         applyCounterOperation(killer,(counter)->{
+            //getLogger().info(" lore counter type = "+counter.getType() + " vs "+deathType);
             if(counter.getType()==deathType){//the lore line is the same type of counter as this kill
                 counter.increment();
             }

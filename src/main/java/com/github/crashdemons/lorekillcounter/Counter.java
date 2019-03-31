@@ -58,7 +58,9 @@ public class Counter {
     
     public static Counter fromLoreLine(String line){
         line = ChatColor.stripColor(line);
-        String[] pieces = line.split(":");
+        String[] pieces = line.split(": ");
+        //System.out.println(pieces.length);
+        //System.out.println(pieces[0]);
         if(pieces.length!=2) return null;//not the right number of colons
         
         //parse the string to get the name/count
@@ -68,6 +70,7 @@ public class Counter {
         try{
             count = Integer.parseInt(str_count);
         }catch(NumberFormatException e){
+            //System.out.println("Invalid integer value "+str_count);
             return null;//invalid count string - can't be a counter
         }
         
