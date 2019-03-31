@@ -117,7 +117,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
             }
             applyCounterOperation(target,(counter)->null);
             sender.sendMessage(ChatColor.GREEN+"Counters cleared for "+target.getName());
-            
+            return true;
         }else if(args[0].equals("add")){
             if(args.length<2) return false;
             if(args.length==3) targetUser = args[2];
@@ -146,6 +146,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
             }
             addCounter(target,new Counter(type));
             sender.sendMessage(ChatColor.GREEN+"Added "+type.getDisplayName()+" counter for "+target.getName());
+            return true;
         }
         return false;
     }
