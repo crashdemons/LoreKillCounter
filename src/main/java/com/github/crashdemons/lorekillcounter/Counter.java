@@ -5,7 +5,7 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 
 /**
  *

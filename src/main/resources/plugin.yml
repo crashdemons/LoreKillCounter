@@ -12,6 +12,7 @@ website: https://github.com/crashdemons
 commands:
   LoreKillCounter:
     description: Add or remove a couunter to an item
+    usage: /<command> add/remove [type] [user]
     aliases: [lkc,counter]
     
 permissions:
