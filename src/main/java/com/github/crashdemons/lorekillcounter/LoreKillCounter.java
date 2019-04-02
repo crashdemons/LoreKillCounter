@@ -63,7 +63,9 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
     }
     
     public void applyCounterOperation(ItemStack stack, CounterOperation operation){
+        if(stack==null) return;
         ItemMeta meta = stack.getItemMeta();
+        if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());
         List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());
         applyCounterOperation(lore,operation);
         meta.setLore(lore);
@@ -71,6 +73,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
     }
     public void applyCounterOperation(Player player, CounterOperation operation){
        ItemStack stack = player.getInventory().getItemInMainHand();
+       if(stack==null) return;
        applyCounterOperation(stack,operation);
     }
     
@@ -78,7 +81,9 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         lore.add(counter.toStringFormatted());
     }
     public void addCounter(ItemStack stack, Counter counter){
+        if(stack==null) return;
         ItemMeta meta = stack.getItemMeta();
+        if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());
         List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());
         addCounter(lore,counter);
         meta.setLore(lore);
@@ -86,6 +91,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
     }
     public void addCounter(Player player, Counter counter){
        ItemStack stack = player.getInventory().getItemInMainHand();
+        if(stack==null) return;
        addCounter(stack,counter);
     }
     
