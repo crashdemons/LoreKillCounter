@@ -32,5 +32,5 @@ Depend on LoreKillCounter:
         <dependency>
             <groupId>com.github.crashdemons</groupId>
             <artifactId>LoreKillCounter</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.2-SNAPSHOT</version>
         </dependency>
