@@ -64,9 +64,9 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
     
     public void applyCounterOperation(ItemStack stack, CounterOperation operation){
         if(stack==null) return;
-        ItemMeta meta = stack.getItemMeta();
-        if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());
-        List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());
+        ItemMeta meta = stack.getItemMeta();//spigot already checks if null and makes a new version - otherwise it returns a clone - should be safe to use directly!
+        if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());//unnecessary unless implementation differs from spigot-api
+        List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());//NPE caused by what?  meta is guaranteed to not be null. Lore is only referenced if it exists.
         applyCounterOperation(lore,operation);
         meta.setLore(lore);
         stack.setItemMeta(meta);
