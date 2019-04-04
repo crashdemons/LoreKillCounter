@@ -145,20 +145,8 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
                 return true;
             }
             String str_type = args[1];
-            CounterType type = CounterType.INVALID;
-            switch(str_type){
-                case "pk":
-                case "players":
-                case "player_kills":
-                    type=CounterType.PLAYER_KILLS;
-                    break;
-                case "mk":
-                case "mobs":
-                case "mob_kills":
-                    type=CounterType.MOB_KILLS;
-                    break;
-            }
-            if(type==CounterType.INVALID){
+            CounterType type = CounterType.fromShortName(str_type);
+            if(type==null || type==CounterType.INVALID){
                 sender.sendMessage(ChatColor.RED + "Invalid counter type - must be `mobs` or `players`.");
                 return true;
             }

@@ -5,6 +5,7 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
+import java.util.HashMap;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -16,13 +17,20 @@ import org.bukkit.entity.Player;
  */
 public enum CounterType {
     INVALID("Invalid Counter"),
-    PLAYER_KILLS("Player Kills"),
-    MOB_KILLS("Mob Kills");
+    PLAYER_KILLS("Player Kills",  "pk","players","pvp"),
+    MOB_KILLS("Mob Kills",  "mk","mobs","pve");
     
     private String displayName=null;
     
-    CounterType(String displayName){
+    private static class Lookups {
+        static final HashMap<String, CounterType> shortNames = new HashMap<>();
+    }
+
+    CounterType(String displayName, String... shortNames){
         this.displayName=displayName;
+        for(String shortName : shortNames){
+            Lookups.shortNames.put(shortName.toUpperCase(), this);
+        }
     }
     
     public String getDisplayName(){
@@ -37,6 +45,17 @@ public enum CounterType {
                 return type;
         return null;
     }
+    
+    public static CounterType fromShortName(String name){
+        CounterType result = Lookups.shortNames.get(name.toUpperCase());
+        if(result!=null) return result;
+        try{
+            return CounterType.valueOf(name.toUpperCase());
+        }catch(Exception e){
+            return null;
+        }
+    }
+    
     
     public static CounterType fromEntityDeath(Entity e){
         if(e instanceof Player) return PLAYER_KILLS;
