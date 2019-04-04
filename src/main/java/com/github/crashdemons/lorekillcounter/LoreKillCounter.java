@@ -48,7 +48,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         getLogger().info("Disabled.");
     }
     
-    public void applyCounterOperation(List<String> lore, CounterOperation operation){
+    public boolean applyCounterOperation(List<String> lore, CounterOperation operation){
         for(int i=0;i<lore.size();i++){
             Counter counter = Counter.fromLoreLine(lore.get(i));
             if(counter!=null && counter.isValid()){//lore line is a valid counter
@@ -61,42 +61,47 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
             }
         }
         lore.removeIf((line)->line.equals("REMOVED_KILL_COUNTER:REMOVED_KILL_COUNTER"));
+        return true;
     }
     
-    public void applyCounterOperation(ItemStack stack, CounterOperation operation){
-        if(stack==null) return;
+    public boolean applyCounterOperation(ItemStack stack, CounterOperation operation){
+        if(stack==null) return false;
         ItemMeta meta = stack.getItemMeta();//spigot already checks if null and makes a new version - otherwise it returns a clone - should be safe to use directly!
         if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());//unnecessary unless implementation differs from spigot-api
-        if(meta==null) return;//Item does not support any meta (eg: AIR)
-        List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());//NPE caused by what?  meta is guaranteed to not be null. Lore is only referenced if it exists.
-        applyCounterOperation(lore,operation);
+        if(meta==null) return false;//Item does not support any meta (eg: AIR)
+        List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());
+        boolean result = applyCounterOperation(lore,operation);
         meta.setLore(lore);
         stack.setItemMeta(meta);
+        return result;
     }
-    public void applyCounterOperation(Player player, CounterOperation operation){
+    public boolean applyCounterOperation(Player player, CounterOperation operation){
         ItemStack stack = player.getInventory().getItemInMainHand();
-        if(stack==null) return;
-        if(stack.getType()==Material.AIR) return;
-        applyCounterOperation(stack,operation);
+        if(stack==null) return false;
+        if(stack.getType()==Material.AIR) return false;
+        return applyCounterOperation(stack,operation);
     }
     
-    public void addCounter(List<String> lore, Counter counter){
+    public boolean addCounter(List<String> lore, Counter counter){
         lore.add(counter.toStringFormatted());
+        return true;
     }
-    public void addCounter(ItemStack stack, Counter counter){
-        if(stack==null) return;
+    public boolean addCounter(ItemStack stack, Counter counter){
+        if(stack==null) return false;
         ItemMeta meta = stack.getItemMeta();
         if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());
+        if(meta==null) return false;//item does not support meta (eg: AIR)
         List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());
-        addCounter(lore,counter);
+        boolean result = addCounter(lore,counter);
         meta.setLore(lore);
         stack.setItemMeta(meta);
+        return result;
     }
-    public void addCounter(Player player, Counter counter){
+    public boolean addCounter(Player player, Counter counter){
         ItemStack stack = player.getInventory().getItemInMainHand();
-        if(stack==null) return;
-        if(stack.getType()==Material.AIR) return;
-        addCounter(stack,counter);
+        if(stack==null) return false;
+        if(stack.getType()==Material.AIR) return false;
+        return addCounter(stack,counter);
     }
     
     
@@ -125,8 +130,11 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
                 sender.sendMessage(ChatColor.RED + "Target player either not specified or not found");
                 return true;
             }
-            applyCounterOperation(target,(counter)->null);
-            sender.sendMessage(ChatColor.GREEN+"Counters cleared for "+target.getName());
+            boolean result = applyCounterOperation(target,(counter)->null);
+            if(result)
+                sender.sendMessage(ChatColor.GREEN+"Counters cleared for "+target.getName());
+            else
+                sender.sendMessage(ChatColor.RED+"Could not clear counters on that (for "+target.getName()+") - is anything being held?");
             return true;
         }else if(args[0].equals("add")){
             if(args.length<2) return false;
@@ -151,11 +159,15 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
                     break;
             }
             if(type==CounterType.INVALID){
-                sender.sendMessage(ChatColor.RED + "Invalid counter type.");
+                sender.sendMessage(ChatColor.RED + "Invalid counter type - must be `mobs` or `players`.");
                 return true;
             }
-            addCounter(target,new Counter(type));
-            sender.sendMessage(ChatColor.GREEN+"Added "+type.getDisplayName()+" counter for "+target.getName());
+            boolean result = addCounter(target,new Counter(type));
+            if(result)
+                sender.sendMessage(ChatColor.GREEN+"Added "+type.getDisplayName()+" counter for "+target.getName());
+            else
+                sender.sendMessage(ChatColor.RED+"Could not add "+type.getDisplayName()+" counter to that (for "+target.getName()+") - is anything being held?");
+                
             return true;
         }
         return false;
