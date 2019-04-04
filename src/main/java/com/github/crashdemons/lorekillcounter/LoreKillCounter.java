@@ -177,6 +177,12 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         //getLogger().info("deathType = "+deathType);
         
         if(deathType == null || deathType == CounterType.INVALID) return;
+        
+        if((killer instanceof Player) && (killed instanceof Player)){
+            if(killer.getUniqueId().equals(killed.getUniqueId())) return;//don't allow suicides to increase the PK counter
+        }
+        
+        
        // getLogger().info(" counter valid");
         
         applyCounterOperation(killer,(counter)->{
