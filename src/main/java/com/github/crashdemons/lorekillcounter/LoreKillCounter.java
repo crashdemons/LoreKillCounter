@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
@@ -66,15 +67,17 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         if(stack==null) return;
         ItemMeta meta = stack.getItemMeta();//spigot already checks if null and makes a new version - otherwise it returns a clone - should be safe to use directly!
         if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());//unnecessary unless implementation differs from spigot-api
+        if(meta==null) return;//Item does not support any meta (eg: AIR)
         List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());//NPE caused by what?  meta is guaranteed to not be null. Lore is only referenced if it exists.
         applyCounterOperation(lore,operation);
         meta.setLore(lore);
         stack.setItemMeta(meta);
     }
     public void applyCounterOperation(Player player, CounterOperation operation){
-       ItemStack stack = player.getInventory().getItemInMainHand();
-       if(stack==null) return;
-       applyCounterOperation(stack,operation);
+        ItemStack stack = player.getInventory().getItemInMainHand();
+        if(stack==null) return;
+        if(stack.getType()==Material.AIR) return;
+        applyCounterOperation(stack,operation);
     }
     
     public void addCounter(List<String> lore, Counter counter){
@@ -90,9 +93,10 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         stack.setItemMeta(meta);
     }
     public void addCounter(Player player, Counter counter){
-       ItemStack stack = player.getInventory().getItemInMainHand();
+        ItemStack stack = player.getInventory().getItemInMainHand();
         if(stack==null) return;
-       addCounter(stack,counter);
+        if(stack.getType()==Material.AIR) return;
+        addCounter(stack,counter);
     }
     
     
