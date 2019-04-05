@@ -18,7 +18,13 @@ import org.bukkit.entity.Player;
 public enum CounterType {
     INVALID("Invalid Counter"),
     PLAYER_KILLS("Player Kills",  "pk","players","pvp"),
-    MOB_KILLS("Mob Kills",  "mk","mobs","pve");
+    MOB_KILLS("Mob Kills",  "mk","mobs","pve"),
+    
+    PLAYER_HEADS("Players Beheaded","pheads","ph"),
+    MOB_HEADS("Mobs Beheaded","mheads","mh")
+    
+    ;
+    
     
     private String displayName=null;
     
@@ -62,5 +68,12 @@ public enum CounterType {
         if(!(e instanceof LivingEntity)) return null;
         if(e instanceof ArmorStand) return null;
         return MOB_KILLS;
+    }
+    
+    public static CounterType fromEntityHeadDrop(Entity e){
+        if(e instanceof Player) return PLAYER_HEADS;
+        if(!(e instanceof LivingEntity)) return null;
+        if(e instanceof ArmorStand) return null;
+        return MOB_HEADS;
     }
 }

@@ -30,12 +30,34 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
     //private final Random rand = new Random();
     
 
+    private boolean PHEnabled=false;
+    private boolean classExists(String name){
+        try {
+            Class.forName( name );
+            return true;
+        } catch( ClassNotFoundException e ) {
+            return false;
+        }
+    }
+    public boolean hasPlayerheads(){return PHEnabled;}
+    private boolean isPHAvailable(){
+        if(this.getServer().getPluginManager().getPlugin("PlayerHeads") != null){
+            return classExists("org.shininet.bukkit.playerheads.events.MobDropHeadEvent");
+        }
+        return false;
+    }
     
     @Override
     public void onEnable(){
         getLogger().info("Enabling...");
         saveDefaultConfig();
         reloadConfig();
+        
+        this.PHEnabled=isPHAvailable();
+        if(PHEnabled){
+            getLogger().info("PlayerHeads support detected");
+            getServer().getPluginManager().registerEvents(new PHListener(this), this);
+        }
         
         getServer().getPluginManager().registerEvents(this, this);
         getLogger().info("Enabled.");
@@ -48,7 +70,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         getLogger().info("Disabled.");
     }
     
-    public boolean applyCounterOperation(List<String> lore, CounterOperation operation){
+    public static boolean applyCounterOperation(List<String> lore, CounterOperation operation){
         for(int i=0;i<lore.size();i++){
             Counter counter = Counter.fromLoreLine(lore.get(i));
             if(counter!=null && counter.isValid()){//lore line is a valid counter
@@ -64,7 +86,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         return true;
     }
     
-    public boolean applyCounterOperation(ItemStack stack, CounterOperation operation){
+    public static boolean applyCounterOperation(ItemStack stack, CounterOperation operation){
         if(stack==null) return false;
         ItemMeta meta = stack.getItemMeta();//spigot already checks if null and makes a new version - otherwise it returns a clone - should be safe to use directly!
         if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());//unnecessary unless implementation differs from spigot-api
@@ -75,18 +97,18 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         stack.setItemMeta(meta);
         return result;
     }
-    public boolean applyCounterOperation(Player player, CounterOperation operation){
+    public static boolean applyCounterOperation(Player player, CounterOperation operation){
         ItemStack stack = player.getInventory().getItemInMainHand();
         if(stack==null) return false;
         if(stack.getType()==Material.AIR) return false;
         return applyCounterOperation(stack,operation);
     }
     
-    public boolean addCounter(List<String> lore, Counter counter){
+    public static boolean addCounter(List<String> lore, Counter counter){
         lore.add(counter.toStringFormatted());
         return true;
     }
-    public boolean addCounter(ItemStack stack, Counter counter){
+    public static boolean addCounter(ItemStack stack, Counter counter){
         if(stack==null) return false;
         ItemMeta meta = stack.getItemMeta();
         if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());
@@ -97,7 +119,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         stack.setItemMeta(meta);
         return result;
     }
-    public boolean addCounter(Player player, Counter counter){
+    public static boolean addCounter(Player player, Counter counter){
         ItemStack stack = player.getInventory().getItemInMainHand();
         if(stack==null) return false;
         if(stack.getType()==Material.AIR) return false;
