@@ -187,7 +187,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
     
     @EventHandler(ignoreCancelled=true)
     public void onBlockBreakEvent(BlockBreakEvent event){
-        if(event instanceof com.github.crashdemons.miningtrophies.events.SimulatedBlockBreakEvent) return;
+        if(MTTools.isSimulatedBlockBreak(event)) return;
         
         Block block = event.getBlock();
         if(block==null) return;
