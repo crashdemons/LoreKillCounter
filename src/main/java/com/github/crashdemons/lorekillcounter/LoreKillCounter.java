@@ -10,12 +10,14 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -183,6 +185,24 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         return false;
     }
     
+    @EventHandler(ignoreCancelled=true)
+    public void onBlockBreakEvent(BlockBreakEvent event){
+        Block block = event.getBlock();
+        if(block==null) return;
+        CounterType breakType = CounterType.fromBlockBreak( block );
+        if(breakType==null || breakType==CounterType.INVALID) return;
+        Player player = event.getPlayer();
+        if(player==null) return;
+        
+        applyCounterOperation(player,(counter)->{
+            //getLogger().info(" lore counter type = "+counter.getType() + " vs "+deathType);
+            if(counter.getType()==breakType){//the lore line is the same type of counter as this kill
+                counter.increment();
+            }
+            return counter;
+        });
+        
+    }
     @EventHandler(ignoreCancelled=true)
     public void onEntityDeathEvent(EntityDeathEvent event){
         

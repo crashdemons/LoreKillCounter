@@ -6,6 +6,8 @@
 package com.github.crashdemons.lorekillcounter;
 
 import java.util.HashMap;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -21,8 +23,10 @@ public enum CounterType {
     MOB_KILLS("Mob Kills",  "mk","mobs","pve"),
     
     PLAYER_HEADS("Players Beheaded","pheads","ph"),
-    MOB_HEADS("Mobs Beheaded","mheads","mh")
+    MOB_HEADS("Mobs Beheaded","mheads","mh"),
     
+    
+    ORES_MINED("Ores Mined","ores","om")
     ;
     
     
@@ -60,6 +64,13 @@ public enum CounterType {
         }catch(Exception e){
             return null;
         }
+    }
+    
+    public static CounterType fromBlockBreak(Block b){
+        if(b.getType()==null &&  b.getType()==Material.AIR) return null;
+        if(b.getType().toString().toUpperCase().endsWith("_ORE")) return ORES_MINED;
+        if(b.getType().toString().toUpperCase().equals("ANCIENT_DEBRIS")) return ORES_MINED;
+        return null;
     }
     
     
