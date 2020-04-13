@@ -7,7 +7,7 @@ description: Adds killcounters to items using loretext
 website: https://github.com/crashdemons
 
 
-
+softdepend: [PlayerHeads,MiningTrophies]
 
 commands:
   LoreKillCounter:
