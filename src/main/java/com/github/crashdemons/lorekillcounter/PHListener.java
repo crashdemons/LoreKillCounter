@@ -25,7 +25,7 @@ public class PHListener implements Listener{
     
     @EventHandler
     public void onLivingEntityDropHeadEvent(LivingEntityDropHeadEvent event){
-        if(!plugin.hasPlayerheads()) return;
+        if(!PlayerHeadsSupport.isPresent()) return;
         if(!plugin.isEnabled()) return;
         if(!(event instanceof LivingEntityDropHeadEvent)) return;
         LivingEntityDropHeadEvent beheading = (LivingEntityDropHeadEvent) event;
@@ -42,13 +42,7 @@ public class PHListener implements Listener{
             if(beheader.getUniqueId().equals(beheadee.getUniqueId())) return;//don't allow suicides to increase the PH counter
         }
         
-        LoreKillCounter.applyCounterOperation(beheader,(counter)->{
-            //getLogger().info(" lore counter type = "+counter.getType() + " vs "+deathType);
-            if(counter.getType()==counterType){//the lore line is the same type of counter as this kill
-                counter.increment();
-            }
-            return counter;
-        });
+        CounterManager.incrementMatchingCounter(beheader, counterType);
         
         
         

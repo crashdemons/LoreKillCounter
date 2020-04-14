@@ -5,7 +5,9 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
@@ -66,19 +68,26 @@ public enum CounterType {
         }
     }
     
-    public static CounterType fromBlockBreak(Block b){
-        if(b.getType()==null &&  b.getType()==Material.AIR) return null;
-        if(b.getType().toString().toUpperCase().endsWith("_ORE")) return ORES_MINED;
-        if(b.getType().toString().toUpperCase().equals("ANCIENT_DEBRIS")) return ORES_MINED;
-        return null;
+    public static List<CounterType> fromBlockBreak(Block b){
+        ArrayList<CounterType> types = new ArrayList<>();
+        if(b.getType()==null &&  b.getType()==Material.AIR) return types;
+        
+        if(b.getType().toString().toUpperCase().endsWith("_ORE")) types.add(ORES_MINED);
+        else if(b.getType().toString().toUpperCase().equals("ANCIENT_DEBRIS")) types.add(ORES_MINED);
+        
+        return types;
     }
     
     
-    public static CounterType fromEntityDeath(Entity e){
-        if(e instanceof Player) return PLAYER_KILLS;
-        if(!(e instanceof LivingEntity)) return null;
-        if(e instanceof ArmorStand) return null;
-        return MOB_KILLS;
+    public static List<CounterType> fromEntityDeath(Entity e){
+        ArrayList<CounterType> types = new ArrayList<>();
+        if(!(e instanceof LivingEntity)) return types;
+        if(e instanceof ArmorStand) return types;
+        
+        
+        if(e instanceof Player) types.add(PLAYER_KILLS);
+        else types.add(MOB_KILLS);
+        return types;
     }
     
     public static CounterType fromEntityHeadDrop(Entity e){

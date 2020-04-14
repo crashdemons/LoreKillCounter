@@ -31,23 +31,6 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
 
     //private final Random rand = new Random();
     
-
-    private boolean PHEnabled=false;
-    private boolean classExists(String name){
-        try {
-            Class.forName( name );
-            return true;
-        } catch( ClassNotFoundException e ) {
-            return false;
-        }
-    }
-    public boolean hasPlayerheads(){return PHEnabled;}
-    private boolean isPHAvailable(){
-        if(this.getServer().getPluginManager().getPlugin("PlayerHeads") != null){
-            return classExists("org.shininet.bukkit.playerheads.events.MobDropHeadEvent");
-        }
-        return false;
-    }
     
     @Override
     public void onEnable(){
@@ -55,8 +38,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         saveDefaultConfig();
         reloadConfig();
         
-        this.PHEnabled=isPHAvailable();
-        if(PHEnabled){
+        if(PlayerHeadsSupport.isPresent()){
             getLogger().info("PlayerHeads support detected");
             getServer().getPluginManager().registerEvents(new PHListener(this), this);
         }
@@ -71,62 +53,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         saveConfig();
         getLogger().info("Disabled.");
     }
-    
-    public static boolean applyCounterOperation(List<String> lore, CounterOperation operation){
-        for(int i=0;i<lore.size();i++){
-            Counter counter = Counter.fromLoreLine(lore.get(i));
-            if(counter!=null && counter.isValid()){//lore line is a valid counter
-                counter = operation.apply(counter);
-                if(counter==null || !counter.isValid()){
-                    lore.set(i,"REMOVED_KILL_COUNTER:REMOVED_KILL_COUNTER");
-                }else{
-                    lore.set(i, counter.toStringFormatted());
-                }
-            }
-        }
-        lore.removeIf((line)->line.equals("REMOVED_KILL_COUNTER:REMOVED_KILL_COUNTER"));
-        return true;
-    }
-    
-    public static boolean applyCounterOperation(ItemStack stack, CounterOperation operation){
-        if(stack==null) return false;
-        ItemMeta meta = stack.getItemMeta();//spigot already checks if null and makes a new version - otherwise it returns a clone - should be safe to use directly!
-        if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());//unnecessary unless implementation differs from spigot-api
-        if(meta==null) return false;//Item does not support any meta (eg: AIR)
-        List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());
-        boolean result = applyCounterOperation(lore,operation);
-        meta.setLore(lore);
-        stack.setItemMeta(meta);
-        return result;
-    }
-    public static boolean applyCounterOperation(Player player, CounterOperation operation){
-        ItemStack stack = player.getInventory().getItemInMainHand();
-        if(stack==null) return false;
-        if(stack.getType()==Material.AIR) return false;
-        return applyCounterOperation(stack,operation);
-    }
-    
-    public static boolean addCounter(List<String> lore, Counter counter){
-        lore.add(counter.toStringFormatted());
-        return true;
-    }
-    public static boolean addCounter(ItemStack stack, Counter counter){
-        if(stack==null) return false;
-        ItemMeta meta = stack.getItemMeta();
-        if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());
-        if(meta==null) return false;//item does not support meta (eg: AIR)
-        List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());
-        boolean result = addCounter(lore,counter);
-        meta.setLore(lore);
-        stack.setItemMeta(meta);
-        return result;
-    }
-    public static boolean addCounter(Player player, Counter counter){
-        ItemStack stack = player.getInventory().getItemInMainHand();
-        if(stack==null) return false;
-        if(stack.getType()==Material.AIR) return false;
-        return addCounter(stack,counter);
-    }
+
     
     
     @Override
@@ -154,7 +81,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
                 sender.sendMessage(ChatColor.RED + "Target player either not specified or not found");
                 return true;
             }
-            boolean result = applyCounterOperation(target,(counter)->null);
+            boolean result = CounterManager.applyCounterOperation(target,(counter)->null);
             if(result)
                 sender.sendMessage(ChatColor.GREEN+"Counters cleared for "+target.getName());
             else
@@ -174,7 +101,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
                 sender.sendMessage(ChatColor.RED + "Invalid counter type - must be `mobs` or `players`.");
                 return true;
             }
-            boolean result = addCounter(target,new Counter(type));
+            boolean result = CounterManager.addCounter(target,new Counter(type));
             if(result)
                 sender.sendMessage(ChatColor.GREEN+"Added "+type.getDisplayName()+" counter for "+target.getName());
             else
@@ -187,22 +114,17 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
     
     @EventHandler(ignoreCancelled=true)
     public void onBlockBreakEvent(BlockBreakEvent event){
-        if(MTTools.isSimulatedBlockBreak(event)) return;
+        if(MiningTrophiesSupport.isSimulatedBlockBreak(event)) return;
         
         Block block = event.getBlock();
         if(block==null) return;
-        CounterType breakType = CounterType.fromBlockBreak( block );
-        if(breakType==null || breakType==CounterType.INVALID) return;
+        List<CounterType> breakTypes = CounterType.fromBlockBreak( block );
+        if(breakTypes.isEmpty()) return;
         Player player = event.getPlayer();
         if(player==null) return;
         
-        applyCounterOperation(player,(counter)->{
-            //getLogger().info(" lore counter type = "+counter.getType() + " vs "+deathType);
-            if(counter.getType()==breakType){//the lore line is the same type of counter as this kill
-                counter.increment();
-            }
-            return counter;
-        });
+        
+        CounterManager.incrementMatchingCounters(player, breakTypes);
         
     }
     @EventHandler(ignoreCancelled=true)
@@ -216,11 +138,13 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         if(!(killer instanceof Player)) return;
         if(!killer.hasPermission("lorekillcounter.counted")) return;
         //getLogger().info(" killer player");
-        CounterType deathType = CounterType.fromEntityDeath(killed);
+        
+        List<CounterType> deathTypes = CounterType.fromEntityDeath(killed);
+        
         
         //getLogger().info("deathType = "+deathType);
         
-        if(deathType == null || deathType == CounterType.INVALID) return;
+        if(deathTypes.isEmpty()) return;
         
         if((killer instanceof Player) && (killed instanceof Player)){
             if(killer.getUniqueId().equals(killed.getUniqueId())) return;//don't allow suicides to increase the PK counter
@@ -229,13 +153,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         
        // getLogger().info(" counter valid");
         
-        applyCounterOperation(killer,(counter)->{
-            //getLogger().info(" lore counter type = "+counter.getType() + " vs "+deathType);
-            if(counter.getType()==deathType){//the lore line is the same type of counter as this kill
-                counter.increment();
-            }
-            return counter;
-        });
+        CounterManager.incrementMatchingCounters(killer, deathTypes);
         
         /*
         //update relevant counters
