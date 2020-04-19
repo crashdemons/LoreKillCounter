@@ -96,7 +96,7 @@ public class CounterTest {
         String line = ChatColor.GREEN+"Player Kills: "+ChatColor.RED+"7";
         Counter result = Counter.fromLoreLine(line);
         assertNotNull(result);
-        assertEquals(CounterBaseType.PLAYER_KILLS, result.getType());
+        assertEquals(CounterBaseType.PLAYER_KILLS, result.getType().baseType);
         assertEquals(7, result.getCount());
     }
     
