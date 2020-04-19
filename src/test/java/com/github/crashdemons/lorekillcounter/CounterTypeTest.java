@@ -21,7 +21,7 @@ public class CounterTypeTest {
     @Test
     public void testGetDisplayName() {
         System.out.println("getDisplayName");
-        CounterType instance = CounterType.PLAYER_KILLS;
+        CounterBaseType instance = CounterBaseType.PLAYER_KILLS;
         String expResult = "Player Kills";
         String result = instance.getDisplayName();
         assertEquals(expResult, result);
@@ -31,8 +31,8 @@ public class CounterTypeTest {
     public void testFromDisplayName() {
         System.out.println("fromDisplayName");
         String name = "Player Kills";
-        CounterType expResult = CounterType.PLAYER_KILLS;
-        CounterType result = CounterType.fromDisplayName(name);
+        CounterBaseType expResult = CounterBaseType.PLAYER_KILLS;
+        CounterBaseType result = CounterBaseType.fromDisplayName(name);
         assertEquals(expResult, result);
     }
     
@@ -40,8 +40,8 @@ public class CounterTypeTest {
     public void testFromDisplayNameInvalid() {
         System.out.println("fromDisplayName Invalid");
         String name = "asdasd";
-        CounterType expResult = null;
-        CounterType result = CounterType.fromDisplayName(name);
+        CounterBaseType expResult = null;
+        CounterBaseType result = CounterBaseType.fromDisplayName(name);
         assertEquals(expResult, result);
     }
 

@@ -5,11 +5,22 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
+import static com.github.crashdemons.lorekillcounter.CounterBaseType.MOB_HEADS;
+import static com.github.crashdemons.lorekillcounter.CounterBaseType.MOB_KILLS;
+import static com.github.crashdemons.lorekillcounter.CounterBaseType.ORES_MINED;
+import static com.github.crashdemons.lorekillcounter.CounterBaseType.PLAYER_HEADS;
+import static com.github.crashdemons.lorekillcounter.CounterBaseType.PLAYER_KILLS;
+import com.sun.istack.internal.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -102,5 +113,57 @@ public class CounterManager {
         if(stack.getType()==Material.AIR) return false;
         
         return CounterManager.applyCounterOperation(player,createIncrementMatchOperation(types));
+    }
+    
+    
+    
+    
+    //------------------------------------------------------------
+    
+    public static CounterType typeFromDisplayName(String name){
+        //determine the type of counter on the item
+        CounterType type = EntitySlainCounterType.fromDisplayName(name);
+        if(type==null) type = CounterType.fromDisplayName(name);
+        return type;
+    }
+    
+    public static CounterType typeFromShortName(String name){
+        return new CounterType(CounterBaseType.fromShortName(name));
+    }
+    
+    private static boolean isOre(@NotNull Material m){
+        String typeName = m.toString().toUpperCase();
+        if(typeName.endsWith("_ORE")) return true;
+        if(typeName.equals("ANCIENT_DEBRIS")) return true;
+        return false;
+    }
+    
+    public static List<CounterType> typeFromBlockBreak(Block b){
+        ArrayList<CounterType> types = new ArrayList<>();
+        Material mat = b.getType();
+        if(mat==null || mat==Material.AIR) return types;//no mining of nothing please!
+        if(isOre(mat)) types.add(ORES_MINED.createType());
+        
+        return types;
+    }
+    
+    
+    public static List<CounterType> typeFromEntityDeath(Entity e){
+        ArrayList<CounterType> types = new ArrayList<>();
+        if(!(e instanceof LivingEntity)) return types;
+        if(e instanceof ArmorStand) return types;
+        
+        EntityType type = e.getType();//notnull
+        types.add(new EntitySlainCounterType(type));
+        if(e instanceof Player) types.add(PLAYER_KILLS.createType());
+        else types.add(MOB_KILLS.createType());
+        return types;
+    }
+    
+    public static CounterType typeFromEntityHeadDrop(Entity e){
+        if(!(e instanceof LivingEntity)) return null;
+        if(e instanceof ArmorStand) return null;
+        if(e instanceof Player) return PLAYER_HEADS.createType();
+        return MOB_HEADS.createType();
     }
 }

@@ -96,8 +96,8 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
                 return true;
             }
             String str_type = args[1];
-            CounterType type = CounterType.fromShortName(str_type);
-            if(type==null || type==CounterType.INVALID){
+            CounterBaseType type = CounterBaseType.fromShortName(str_type);
+            if(type==null || type==CounterBaseType.INVALID){
                 sender.sendMessage(ChatColor.RED + "Invalid counter type - must be `mobs` or `players`.");
                 return true;
             }
@@ -118,7 +118,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         
         Block block = event.getBlock();
         if(block==null) return;
-        List<CounterType> breakTypes = CounterType.fromBlockBreak( block );
+        List<CounterType> breakTypes = CounterManager.typeFromBlockBreak(block);
         if(breakTypes.isEmpty()) return;
         Player player = event.getPlayer();
         if(player==null) return;
@@ -139,7 +139,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         if(!killer.hasPermission("lorekillcounter.counted")) return;
         //getLogger().info(" killer player");
         
-        List<CounterType> deathTypes = CounterType.fromEntityDeath(killed);
+        List<CounterType> deathTypes = CounterManager.typeFromEntityDeath(killed);
         
         
         //getLogger().info("deathType = "+deathType);

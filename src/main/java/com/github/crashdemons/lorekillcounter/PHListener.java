@@ -34,8 +34,8 @@ public class PHListener implements Listener{
         Player beheader = beheadee.getKiller();
         
         if(beheader==null) return;
-        CounterType counterType = CounterType.fromEntityHeadDrop(beheadee);
-        if(counterType==null || counterType==CounterType.INVALID) return;
+        CounterType counterType = CounterManager.typeFromEntityHeadDrop(beheadee);
+        if(counterType==null || counterType.baseType==CounterBaseType.INVALID) return;
         
         
         if((beheader instanceof Player) && (beheadee instanceof Player)){

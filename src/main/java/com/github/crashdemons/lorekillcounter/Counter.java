@@ -5,6 +5,7 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
+import java.text.MessageFormat;
 import org.bukkit.ChatColor;
 
 /**
@@ -13,7 +14,8 @@ import org.bukkit.ChatColor;
  */
 public class Counter {
     private int count=0;
-    private CounterType type=CounterType.INVALID;
+    //private CounterType type=CounterType.INVALID;
+    private final CounterType type;
 
     public String toStringFormatted(){
         return ChatColor.GREEN+getName()+": "+ChatColor.RED+getCount();
@@ -39,18 +41,31 @@ public class Counter {
         return type;
     }
 
-    public void setType(CounterType type) {
-        this.type = type;
-    }
-    public boolean isValid(){ return type!=CounterType.INVALID; }
+   // public void setType(CounterType type) {
+   //     this.type = type;
+   // }
+    public boolean isValid(){ return type.baseType!=CounterBaseType.INVALID; }
+   
     
-    public Counter(CounterType type){
-        this.type=type;
+    public Counter(CounterBaseType type){
+        this.type = new CounterType(type);
     }    
-    public Counter(CounterType type, int count){
-        this.type=type;
+    public Counter(CounterBaseType type, int count){
+        this.type = new CounterType(type);
         this.count=count;
     }
+    
+    public Counter(CounterType type){
+        this.type = type;
+    }
+    public Counter(CounterType type, int count){
+        this.type = type;
+        this.count=count;
+    }
+    /*public Counter(CounterType type, String extendedData, int count){
+        this.type = new ExtendedCounterType(type, extendedData);
+        this.count=count;
+    }*/
     
     public void increment(){
         this.count++;
@@ -74,8 +89,10 @@ public class Counter {
             return null;//invalid count string - can't be a counter
         }
         
-        CounterType type = CounterType.fromDisplayName(name);//match display name
-        if(type==null) return null;
-        return new Counter(type,count);
+        EntitySlainCounterType slainCounter = EntitySlainCounterType.fromDisplayName(name);
+        if(slainCounter!=null) return new Counter(slainCounter, count);
+        CounterType counterType = CounterType.fromDisplayName(name);
+        if(counterType!=null) return new Counter(counterType, count);
+        return null;
     }
 }
