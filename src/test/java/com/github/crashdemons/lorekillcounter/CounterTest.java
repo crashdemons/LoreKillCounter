@@ -150,4 +150,15 @@ public class CounterTest {
     }
     
     
+    @Test
+    public void testDisplayName() {
+        CounterType type = new EntitySlainCounterType(EntityType.TRADER_LLAMA);
+        assertEquals("Trader llamas Slain",type.getDisplayName());
+        
+        type = new CounterType(CounterBaseType.ENTITIES_SLAIN,"xYz AbC");
+        assertEquals("xYz AbCs Slain",type.getDisplayName());
+        
+        type = CounterBaseType.ORES_MINED.createType();
+        assertEquals("Ores Mined",type.getDisplayName());
+    }
 }
