@@ -5,9 +5,9 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
-import com.sun.istack.internal.Nullable;
 import java.util.HashMap;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.Nullable;
 
 /**
  *

@@ -5,9 +5,9 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
-import com.sun.istack.internal.Nullable;
 import java.text.MessageFormat;
 import java.util.Objects;
+import org.jetbrains.annotations.Nullable;
 
 /**
  *

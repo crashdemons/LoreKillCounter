@@ -62,6 +62,11 @@
     
     <dependencies>
         <dependency>
+          <groupId>org.jetbrains</groupId>
+          <artifactId>annotations</artifactId>
+          <version>15.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.shininet.bukkit</groupId>
             <artifactId>PlayerHeads</artifactId>
             <version>4.9.4-SNAPSHOT</version>

@@ -10,7 +10,6 @@ import static com.github.crashdemons.lorekillcounter.CounterBaseType.MOB_KILLS;
 import static com.github.crashdemons.lorekillcounter.CounterBaseType.ORES_MINED;
 import static com.github.crashdemons.lorekillcounter.CounterBaseType.PLAYER_HEADS;
 import static com.github.crashdemons.lorekillcounter.CounterBaseType.PLAYER_KILLS;
-import com.sun.istack.internal.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +23,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 /**
  *
