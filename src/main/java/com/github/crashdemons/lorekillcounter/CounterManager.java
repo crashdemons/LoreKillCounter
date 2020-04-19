@@ -6,6 +6,7 @@
 package com.github.crashdemons.lorekillcounter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -90,19 +91,10 @@ public class CounterManager {
             return counter;
         };
     }
-    private static CounterOperation createIncrementMatchOperation(CounterType type){
-        ArrayList<CounterType> types = new ArrayList<>();
-        types.add(type);
-        return createIncrementMatchOperation(types);
-    }
     
     
     public static boolean incrementMatchingCounter(Player player, CounterType type){
-        ItemStack stack = player.getInventory().getItemInMainHand();
-        if(stack==null) return false;
-        if(stack.getType()==Material.AIR) return false;
-        
-        return CounterManager.applyCounterOperation(player,createIncrementMatchOperation(type));
+        return incrementMatchingCounters(player, Arrays.asList(type));
     }
     public static boolean incrementMatchingCounters(Player player, List<CounterType> types){
         ItemStack stack = player.getInventory().getItemInMainHand();
