@@ -6,6 +6,7 @@
 package com.github.crashdemons.lorekillcounter;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -99,5 +100,39 @@ public class CounterTest {
         assertEquals(CounterBaseType.PLAYER_KILLS, result.getType().baseType);
         assertEquals(7, result.getCount());
     }
+    
+    
+    @Test
+    public void testFromLoreLineExtended() {
+        System.out.println("fromLoreLine extended");
+        String line = ChatColor.GREEN+"Withers Slain: "+ChatColor.RED+"7";
+        Counter result = Counter.fromLoreLine(line);
+        assertNotNull(result);
+        assertEquals(CounterBaseType.ENTITIES_SLAIN, result.getType().baseType);
+        assertEquals(7, result.getCount());
+        
+        CounterType type = result.getType();
+        if(!(type instanceof EntitySlainCounterType)) fail("countertype is not EntitySlainCounterType");
+        EntitySlainCounterType slainType = (EntitySlainCounterType) type;
+        
+        assertEquals(slainType.entityType,EntityType.WITHER);
+    }
+    
+    @Test
+    public void testFromLoreLineExtended2() {
+        System.out.println("fromLoreLine extended2");
+        String line = ChatColor.GREEN+"Trader Llamas Slain: "+ChatColor.RED+"7";
+        Counter result = Counter.fromLoreLine(line);
+        assertNotNull(result);
+        assertEquals(CounterBaseType.ENTITIES_SLAIN, result.getType().baseType);
+        assertEquals(7, result.getCount());
+        
+        CounterType type = result.getType();
+        if(!(type instanceof EntitySlainCounterType)) fail("countertype is not EntitySlainCounterType");
+        EntitySlainCounterType slainType = (EntitySlainCounterType) type;
+        
+        assertEquals(slainType.entityType,EntityType.TRADER_LLAMA);
+    }
+    
     
 }
