@@ -28,7 +28,8 @@ public enum CounterType {
     MOB_HEADS("Mobs Beheaded","mheads","mh"),
     
     
-    ORES_MINED("Ores Mined","ores","om")
+    ORES_MINED("Ores Mined","ores","om"),
+    
     ;
     
     
