@@ -5,6 +5,6 @@
  */
 
 /**
- * Core classes and information belonging to MiningTrophies - including the plugin class.
+ * Core classes and information belonging to LKC - including the plugin class.
  */
 package com.github.crashdemons.lorekillcounter;
