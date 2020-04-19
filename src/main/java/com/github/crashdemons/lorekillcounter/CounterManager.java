@@ -20,6 +20,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class CounterManager {
     private CounterManager(){}
     
+    
+    
     public static boolean applyCounterOperation(List<String> lore, CounterOperation operation){
         for(int i=0;i<lore.size();i++){
             Counter counter = Counter.fromLoreLine(lore.get(i));
@@ -77,30 +79,36 @@ public class CounterManager {
         return addCounter(stack,counter);
     }
     
+
+    
+    private static CounterOperation createIncrementMatchOperation(List<CounterType> types){
+        return (counter)->{
+            //getLogger().info(" lore counter type = "+counter.getType() + " vs "+deathType);
+            if(types.contains(counter.getType())){//the lore line is the same type of counter as this kill
+                counter.increment();
+            }
+            return counter;
+        };
+    }
+    private static CounterOperation createIncrementMatchOperation(CounterType type){
+        ArrayList<CounterType> types = new ArrayList<>();
+        types.add(type);
+        return createIncrementMatchOperation(types);
+    }
+    
+    
     public static boolean incrementMatchingCounter(Player player, CounterType type){
         ItemStack stack = player.getInventory().getItemInMainHand();
         if(stack==null) return false;
         if(stack.getType()==Material.AIR) return false;
         
-        return CounterManager.applyCounterOperation(player,(counter)->{
-            //getLogger().info(" lore counter type = "+counter.getType() + " vs "+deathType);
-            if(counter.getType() == type){//the lore line is the same type of counter as this kill
-                counter.increment();
-            }
-            return counter;
-        });
+        return CounterManager.applyCounterOperation(player,createIncrementMatchOperation(type));
     }
     public static boolean incrementMatchingCounters(Player player, List<CounterType> types){
         ItemStack stack = player.getInventory().getItemInMainHand();
         if(stack==null) return false;
         if(stack.getType()==Material.AIR) return false;
         
-        return CounterManager.applyCounterOperation(player,(counter)->{
-            //getLogger().info(" lore counter type = "+counter.getType() + " vs "+deathType);
-            if(types.contains(counter.getType())){//the lore line is the same type of counter as this kill
-                counter.increment();
-            }
-            return counter;
-        });
+        return CounterManager.applyCounterOperation(player,createIncrementMatchOperation(types));
     }
 }
