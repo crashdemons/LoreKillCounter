@@ -41,4 +41,17 @@ public class EntitySlainCounterType extends CounterType {
         if(type==null) return null;
         return new EntitySlainCounterType(type);
     }
+    
+    @Nullable
+    public static EntitySlainCounterType fromEntityName(String entityName){
+        EntityType type = null;
+        try{
+            type = EntityType.valueOf(entityName.toUpperCase());
+        }catch(Exception ex){
+            //
+        }
+        if(type==null) return null;
+        if(!type.isAlive()) return null;
+        return new EntitySlainCounterType(type);
+    }
 }
