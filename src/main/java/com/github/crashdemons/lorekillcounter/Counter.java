@@ -5,7 +5,6 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
-import java.text.MessageFormat;
 import org.bukkit.ChatColor;
 
 /**
