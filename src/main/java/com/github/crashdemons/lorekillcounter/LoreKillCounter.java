@@ -5,6 +5,14 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
+import com.github.crashdemons.lorekillcounter.integrations.MiningTrophiesSupport;
+import com.github.crashdemons.lorekillcounter.integrations.PHListener;
+import com.github.crashdemons.lorekillcounter.integrations.PlayerHeadsSupport;
+import com.github.crashdemons.lorekillcounter.counters.CounterType;
+import com.github.crashdemons.lorekillcounter.counters.CounterBaseType;
+import com.github.crashdemons.lorekillcounter.counters.Counter;
+import com.github.crashdemons.lorekillcounter.counters.CounterManager;
+import com.github.crashdemons.lorekillcounter.counters.EntitySlainCounterType;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

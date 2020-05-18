@@ -5,6 +5,7 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
+import com.github.crashdemons.lorekillcounter.counters.CounterBaseType;
 import org.bukkit.entity.Entity;
 import org.junit.Test;
 import static org.junit.Assert.*;

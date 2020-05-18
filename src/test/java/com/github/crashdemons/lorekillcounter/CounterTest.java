@@ -5,6 +5,10 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
+import com.github.crashdemons.lorekillcounter.counters.EntitySlainCounterType;
+import com.github.crashdemons.lorekillcounter.counters.CounterBaseType;
+import com.github.crashdemons.lorekillcounter.counters.Counter;
+import com.github.crashdemons.lorekillcounter.counters.CounterType;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.junit.Test;

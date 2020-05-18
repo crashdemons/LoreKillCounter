@@ -3,9 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.github.crashdemons.lorekillcounter;
+package com.github.crashdemons.lorekillcounter.integrations;
 
 
+import com.github.crashdemons.lorekillcounter.LoreKillCounter;
+import com.github.crashdemons.lorekillcounter.counters.CounterType;
+import com.github.crashdemons.lorekillcounter.counters.CounterBaseType;
+import com.github.crashdemons.lorekillcounter.counters.CounterManager;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -19,7 +23,7 @@ import org.shininet.bukkit.playerheads.events.LivingEntityDropHeadEvent;
  */
 public class PHListener implements Listener{
     private final LoreKillCounter plugin;
-    PHListener(LoreKillCounter plugin){
+    public PHListener(LoreKillCounter plugin){
         this.plugin=plugin;
     }
     

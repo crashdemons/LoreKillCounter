@@ -3,13 +3,13 @@
  *  License, v. 2.0. If a copy of the MPL was not distributed with this
  *  file, You can obtain one at http://mozilla.org/MPL/2.0/ .
  */
-package com.github.crashdemons.lorekillcounter;
+package com.github.crashdemons.lorekillcounter.counters;
 
-import static com.github.crashdemons.lorekillcounter.CounterBaseType.MOB_HEADS;
-import static com.github.crashdemons.lorekillcounter.CounterBaseType.MOB_KILLS;
-import static com.github.crashdemons.lorekillcounter.CounterBaseType.ORES_MINED;
-import static com.github.crashdemons.lorekillcounter.CounterBaseType.PLAYER_HEADS;
-import static com.github.crashdemons.lorekillcounter.CounterBaseType.PLAYER_KILLS;
+import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.MOB_HEADS;
+import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.MOB_KILLS;
+import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.ORES_MINED;
+import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.PLAYER_HEADS;
+import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.PLAYER_KILLS;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
