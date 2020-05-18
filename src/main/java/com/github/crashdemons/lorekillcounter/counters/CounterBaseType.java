@@ -50,6 +50,10 @@ public enum CounterBaseType {
         }
     }
     
+    public boolean isValid(){
+        return this!=CounterBaseType.INVALID;
+    }
+    
     public boolean isExtended(){
         return extended;
     }

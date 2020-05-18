@@ -25,20 +25,19 @@ public class CounterTabCompleter implements TabCompleter{
         if(!command.getName().equalsIgnoreCase("LoreKillCounter")) return null;
         
         
-        if(args.length == 0) return Arrays.asList("add","clear","addextended","addex");
+        if(args.length == 1) return Arrays.asList("add","clear","addextended","addex");
         
         
         //List<String> argList = Stream.of(args).map(String::toLowerCase).collect(Collectors.toList());
-        if(args.length >= 1){//counter add ...
+        if(args.length >= 2){//counter add ...
             if(args[0].equalsIgnoreCase("add")){
-                if(args.length==1) return Stream.of( CounterBaseType.values() ).filter(CounterBaseType::isBasic).map(CounterBaseType::name).collect(Collectors.toList());
+                if(args.length==2) return Stream.of( CounterBaseType.values() ).filter(CounterBaseType::isValid).filter(CounterBaseType::isBasic).map(CounterBaseType::name).collect(Collectors.toList());
             }else if(args[0].equalsIgnoreCase("addextended") || args[0].equalsIgnoreCase("addex")){
-                if(args.length==1) return Stream.of( CounterBaseType.values() ).filter(CounterBaseType::isExtended).map(CounterBaseType::name).collect(Collectors.toList());
-                if(args.length==2) return Stream.of( EntityType.values() ).filter(EntityType::isAlive).map(EntityType::name).collect(Collectors.toList());
+                if(args.length==2) return Stream.of( CounterBaseType.values() ).filter(CounterBaseType::isExtended).map(CounterBaseType::name).collect(Collectors.toList());
+                if(args.length==3) return Stream.of( EntityType.values() ).filter(EntityType::isAlive).map(EntityType::name).collect(Collectors.toList());
             }else if(args[0].equalsIgnoreCase("clear") || args[0].equalsIgnoreCase("remove")){
                 return new ArrayList<>();
             }
-            args[0]=args[0].toLowerCase();
             
         }
         //unsupported argument length
