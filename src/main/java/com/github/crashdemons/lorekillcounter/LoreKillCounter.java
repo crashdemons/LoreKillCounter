@@ -27,6 +27,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         }
         
         getCommand("LoreKillCounter").setExecutor(new CounterCommandExecutor());
+        getCommand("LoreKillCounter").setTabCompleter(new CounterTabCompleter());
         
         getServer().getPluginManager().registerEvents(new CounterListener(), this);
         getLogger().info("Enabled.");

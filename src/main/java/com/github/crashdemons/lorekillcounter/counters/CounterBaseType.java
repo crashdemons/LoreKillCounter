@@ -53,6 +53,9 @@ public enum CounterBaseType {
     public boolean isExtended(){
         return extended;
     }
+    public boolean isBasic(){
+        return !extended;
+    }
     
     public String getDisplayName(){
         if(displayName==null) return this.name();

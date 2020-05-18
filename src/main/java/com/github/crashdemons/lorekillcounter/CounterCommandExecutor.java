@@ -109,7 +109,7 @@ public class CounterCommandExecutor implements CommandExecutor {
             CounterBaseType type = CounterBaseType.fromShortName(str_type);
             addCounter(sender,target,type);
             return true;
-       }else if(args[0].equals("addex")){//addex type data user
+       }else if(args[0].equals("addex") || args[0].equals("addextended")){//addex type data user
             if(args.length<3) return false;
             if(args.length==4) targetUser = args[3];
             Player target = Bukkit.getPlayer(targetUser);
