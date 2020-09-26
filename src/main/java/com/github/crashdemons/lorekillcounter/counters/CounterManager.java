@@ -5,11 +5,7 @@
  */
 package com.github.crashdemons.lorekillcounter.counters;
 
-import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.MOB_HEADS;
-import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.MOB_KILLS;
-import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.ORES_MINED;
-import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.PLAYER_HEADS;
-import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.PLAYER_KILLS;
+import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -108,6 +104,7 @@ public class CounterManager {
         return incrementMatchingCounters(player, Arrays.asList(type));
     }
     public static boolean incrementMatchingCounters(Player player, List<CounterType> types){
+        if(types.isEmpty()) return true;
         ItemStack stack = player.getInventory().getItemInMainHand();
         if(stack==null) return false;
         if(stack.getType()==Material.AIR) return false;
@@ -143,6 +140,7 @@ public class CounterManager {
         Material mat = b.getType();
         if(mat==null || mat==Material.AIR) return types;//no mining of nothing please!
         if(isOre(mat)) types.add(ORES_MINED.createType());
+        types.add(BLOCKS_MINED.createType());
         
         return types;
     }
@@ -157,13 +155,18 @@ public class CounterManager {
         types.add(new EntitySlainCounterType(type));
         if(e instanceof Player) types.add(PLAYER_KILLS.createType());
         else types.add(MOB_KILLS.createType());
+        types.add(ALL_KILLS.createType());
+        
         return types;
     }
     
-    public static CounterType typeFromEntityHeadDrop(Entity e){
-        if(!(e instanceof LivingEntity)) return null;
-        if(e instanceof ArmorStand) return null;
-        if(e instanceof Player) return PLAYER_HEADS.createType();
-        return MOB_HEADS.createType();
+    public static List<CounterType> typeFromEntityHeadDrop(Entity e){
+        ArrayList<CounterType> types = new ArrayList<>();
+        if(!(e instanceof LivingEntity)) return types;
+        if(e instanceof ArmorStand) return types;
+        if(e instanceof Player) types.add(PLAYER_HEADS.createType());
+        else types.add(MOB_HEADS.createType());
+        types.add(ALL_HEADS.createType());
+        return types;
     }
 }

@@ -13,13 +13,17 @@ import java.util.HashMap;
  */
 public enum CounterBaseType {
     INVALID("Invalid Counter"),
+    
+    ALL_KILLS("Kills","kills","k"),
     PLAYER_KILLS("Player Kills",  "pk","players","pvp"),
     MOB_KILLS("Mob Kills",  "mk","mobs","pve"),
     
+    
+    ALL_HEADS("Beheadings","heads","h"),
     PLAYER_HEADS("Players Beheaded","pheads","ph"),
     MOB_HEADS("Mobs Beheaded","mheads","mh"),
     
-    
+    BLOCKS_MINED("Blocks Mined","blocks","bm"),
     ORES_MINED("Ores Mined","ores","om"),
     
     ENTITIES_SLAIN(true, "{0}s Slain", "entities","es","ek"),
