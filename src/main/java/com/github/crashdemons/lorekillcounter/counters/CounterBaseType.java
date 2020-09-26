@@ -18,6 +18,8 @@ public enum CounterBaseType {
     PLAYER_KILLS("Player Kills",  "pk","players","pvp"),
     MOB_KILLS("Mob Kills",  "mk","mobs","pve"),
     
+    MARKSMAN_KILLS("Marksman Kills", "marksman","rk"),
+    ELYTRA_KILLS("Elytra Kills",  "elytra","ek"),
     
     ALL_HEADS("Beheadings","heads","h"),
     PLAYER_HEADS("Players Beheaded","pheads","ph"),
@@ -26,7 +28,7 @@ public enum CounterBaseType {
     BLOCKS_MINED("Blocks Mined","blocks","bm"),
     ORES_MINED("Ores Mined","ores","om"),
     
-    ENTITIES_SLAIN(true, "{0}s Slain", "entities","es","ek"),
+    ENTITIES_SLAIN(true, "{0}s Slain", "entities","es"),
     
     ;
     

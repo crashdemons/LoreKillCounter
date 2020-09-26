@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
@@ -145,10 +146,10 @@ public class CounterManager {
         return types;
     }
     
+    private static final double SNIPER_DUEL_DISTANCE_SQUARED = 50*50;
     
-    public static List<CounterType> typeFromEntityDeath(Entity e){
+    public static List<CounterType> typeFromEntityDeath(LivingEntity e){
         ArrayList<CounterType> types = new ArrayList<>();
-        if(!(e instanceof LivingEntity)) return types;
         if(e instanceof ArmorStand) return types;
         
         EntityType type = e.getType();//notnull
@@ -156,6 +157,21 @@ public class CounterManager {
         if(e instanceof Player) types.add(PLAYER_KILLS.createType());
         else types.add(MOB_KILLS.createType());
         types.add(ALL_KILLS.createType());
+        
+        Player killer = e.getKiller();
+        if(killer!=null){
+            if(killer.isGliding()){
+                types.add(ELYTRA_KILLS.createType());
+            }
+            
+            Location locA = e.getLocation();
+            Location locB = killer.getLocation();
+            try{
+                if(locA.distanceSquared(locB)>=SNIPER_DUEL_DISTANCE_SQUARED){
+                    types.add(MARKSMAN_KILLS.createType());
+                }
+            }catch(Exception ex){ }//different dimension
+        }
         
         return types;
     }
