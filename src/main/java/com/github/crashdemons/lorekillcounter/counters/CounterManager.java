@@ -171,7 +171,7 @@ public class CounterManager {
                     types.add(MARKSMAN_KILLS.createType());
                 }
             }catch(Exception ex){ }//different dimension
-        }
+        }else{ }
         
         return types;
     }
