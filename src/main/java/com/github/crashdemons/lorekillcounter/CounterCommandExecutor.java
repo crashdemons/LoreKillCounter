@@ -56,11 +56,14 @@ public class CounterCommandExecutor implements CommandExecutor {
     }
     private boolean addCounter(CommandSender sender, Player target, Counter counter){
             boolean result = CounterManager.addCounter(target,counter);
+            boolean targetIsDifferent = !sender.getName().equals(target.getName());
             if(result){
                 sender.sendMessage(ChatColor.GREEN+"Added "+counter.getType().getDisplayName()+" counter for "+target.getName());
+                if(targetIsDifferent) target.sendMessage(ChatColor.GREEN+"Added "+counter.getType().getDisplayName()+" counter for "+target.getName());
                 return true;
             }else{
                 sender.sendMessage(ChatColor.RED+"Could not add "+counter.getType().getDisplayName()+" counter to that (for "+target.getName()+") - is anything being held?");
+                if(targetIsDifferent) target.sendMessage(ChatColor.RED+"Could not add "+counter.getType().getDisplayName()+" counter to that (for "+target.getName()+") - is anything being held?");
                 return false;
             }
     }
