@@ -5,6 +5,7 @@
  */
 package com.github.crashdemons.lorekillcounter.counters;
 
+import com.github.crashdemons.lorekillcounter.LoreKillCounter;
 import static com.github.crashdemons.lorekillcounter.counters.CounterBaseType.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,25 +67,27 @@ public class CounterManager {
     }
 
     
-    public static boolean addCounter(List<String> lore, Counter counter){
+    public static CounterAddResult addCounter(List<String> lore, Counter counter){
+        if(lore.size()>=LoreKillCounter.instance.getLoreCap()) return CounterAddResult.ERROR_LORE_CAP;
+        
         lore.add(counter.toStringFormatted());
-        return true;
+        return CounterAddResult.SUCCESS;
     }
-    public static boolean addCounter(ItemStack stack, Counter counter){
-        if(stack==null) return false;
+    public static CounterAddResult addCounter(ItemStack stack, Counter counter){
+        if(stack==null) return CounterAddResult.ERROR_NO_ITEM;
         ItemMeta meta = stack.getItemMeta();
         if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());
-        if(meta==null) return false;//item does not support meta (eg: AIR)
+        if(meta==null) return CounterAddResult.ERROR_NO_ITEM;//item does not support meta (eg: AIR)
         List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());
-        boolean result = addCounter(lore,counter);
+        CounterAddResult result = addCounter(lore,counter);
         meta.setLore(lore);
         stack.setItemMeta(meta);
         return result;
     }
-    public static boolean addCounter(Player player, Counter counter){
+    public static CounterAddResult addCounter(Player player, Counter counter){
         ItemStack stack = player.getInventory().getItemInMainHand();
-        if(stack==null) return false;
-        if(stack.getType()==Material.AIR) return false;
+        if(stack==null) return CounterAddResult.ERROR_NO_ITEM;
+        if(stack.getType()==Material.AIR) return CounterAddResult.ERROR_NO_ITEM;
         return addCounter(stack,counter);
     }
     

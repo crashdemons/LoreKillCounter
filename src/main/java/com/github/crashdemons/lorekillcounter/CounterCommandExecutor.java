@@ -6,6 +6,7 @@
 package com.github.crashdemons.lorekillcounter;
 
 import com.github.crashdemons.lorekillcounter.counters.Counter;
+import com.github.crashdemons.lorekillcounter.counters.CounterAddResult;
 import com.github.crashdemons.lorekillcounter.counters.CounterBaseType;
 import com.github.crashdemons.lorekillcounter.counters.CounterManager;
 import com.github.crashdemons.lorekillcounter.counters.CounterType;
@@ -55,17 +56,24 @@ public class CounterCommandExecutor implements CommandExecutor {
             return addCounter( sender,  target,  counter);
     }
     private boolean addCounter(CommandSender sender, Player target, Counter counter){
-            boolean result = CounterManager.addCounter(target,counter);
+            CounterAddResult result = CounterManager.addCounter(target,counter);
             boolean targetIsDifferent = !sender.getName().equals(target.getName());
-            if(result){
-                sender.sendMessage(ChatColor.GREEN+"Added "+counter.getType().getDisplayName()+" counter for "+target.getName());
-                if(targetIsDifferent) target.sendMessage(ChatColor.GREEN+"Added "+counter.getType().getDisplayName()+" counter for "+target.getName());
-                return true;
-            }else{
-                sender.sendMessage(ChatColor.RED+"Could not add "+counter.getType().getDisplayName()+" counter to that (for "+target.getName()+") - is anything being held?");
-                if(targetIsDifferent) target.sendMessage(ChatColor.RED+"Could not add "+counter.getType().getDisplayName()+" counter to that (for "+target.getName()+") - is anything being held?");
-                return false;
+            
+            switch(result){
+                case ERROR_NO_ITEM:
+                    sender.sendMessage(ChatColor.RED+"Could not add "+counter.getType().getDisplayName()+" counter to that (for "+target.getName()+") - is anything being held?");
+                    if(targetIsDifferent) target.sendMessage(ChatColor.RED+"Could not add "+counter.getType().getDisplayName()+" counter to that (for "+target.getName()+") - is anything being held?");
+                    return false;
+                case ERROR_LORE_CAP:
+                    sender.sendMessage(ChatColor.RED+"Could not add "+counter.getType().getDisplayName()+" counter to that (for "+target.getName()+") - loretext is limited to "+LoreKillCounter.instance.getLoreCap()+" lines.");
+                    if(targetIsDifferent) target.sendMessage(ChatColor.RED+"Could not add "+counter.getType().getDisplayName()+" counter to that (for "+target.getName()+") - loretext is limited to "+LoreKillCounter.instance.getLoreCap()+" lines.");
+                    return false;
+                case SUCCESS:
+                    sender.sendMessage(ChatColor.GREEN+"Added "+counter.getType().getDisplayName()+" counter for "+target.getName());
+                    if(targetIsDifferent) target.sendMessage(ChatColor.GREEN+"Added "+counter.getType().getDisplayName()+" counter for "+target.getName());
+                    return true;
             }
+            return false;
     }
     
     

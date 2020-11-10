@@ -15,6 +15,21 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author crash
  */
 public class LoreKillCounter extends JavaPlugin implements Listener{
+    public static LoreKillCounter instance = null;
+    
+    public int getLoreCap(){
+        int cap = getConfig().getInt("lore-line-cap");
+        if(cap==0) cap=5;
+        return cap;
+    }
+    
+    
+    @Override
+    public void onLoad(){
+        instance = this;
+    }
+    
+    
     @Override
     public void onEnable(){
         getLogger().info("Enabling...");
