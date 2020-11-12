@@ -46,11 +46,12 @@ public class BountyCommandExecutor implements CommandExecutor  {
         
         try{
             String bounty = LoreKillCounter.instance.bountyManager.getItemBounty(stack);
-            if(bounty==null) bounty = LoreKillCounter.instance.bountyManager.rerollBounty(player, stack);
+            boolean rerolled = false;
+            if(bounty==null){ bounty = LoreKillCounter.instance.bountyManager.rerollBounty(player, stack); rerolled = true; }
             if(bounty==null){
                 sender.sendMessage("* Failed to choose a bounty for this item - try /bounty again later.");
             }else{
-                sender.sendMessage("* This item has a bounty for: "+bounty+". "+ (
+                sender.sendMessage("* This item"+(rerolled?" now":"")+" has a bounty for: "+bounty+". "+ (
                         sender.hasPermission("lorekillcounter.bounty.reset")?"Reroll cost is "+LoreKillCounter.instance.bountyManager.getBountyResetCost(counter.getCount())+" points.":""
                 ));
             }
@@ -86,8 +87,8 @@ public class BountyCommandExecutor implements CommandExecutor  {
         int cost = LoreKillCounter.instance.bountyManager.getBountyResetCost(counter.getCount());
 
         try{
-            String bounty = LoreKillCounter.instance.bountyManager.getItemBounty(stack);
-            if(bounty==null) bounty = LoreKillCounter.instance.bountyManager.rerollBounty(player, stack);
+            String bounty;// = LoreKillCounter.instance.bountyManager.getItemBounty(stack);
+            bounty = LoreKillCounter.instance.bountyManager.rerollBounty(player, stack);
             if(bounty==null){
                 sender.sendMessage("* Cleared bounty target for this item (cost: "+cost+" points) - see /bounty");
             }else{

@@ -5,6 +5,7 @@
  */
 package com.github.crashdemons.lorekillcounter.bounties;
 
+import com.github.crashdemons.lorekillcounter.LoreKillCounter;
 import com.github.crashdemons.lorekillcounter.counters.CounterBaseType;
 import com.github.crashdemons.lorekillcounter.counters.CounterManager;
 import java.util.List;
@@ -61,8 +62,10 @@ public class BountyManager {
         
     }
     public String rerollBounty(Player holder, ItemStack stack){
+        debug("rerollBounty"); 
         removeItemBounty(stack);
         String newBounty = getNewRandomBounty(holder);
+        setItemBounty(stack,newBounty);
         return newBounty;
     }
     
@@ -73,6 +76,7 @@ public class BountyManager {
         return (int)bountyCostF;
     }
     
+    private void debug(String s){}
     
     private static final float BOUNTY_MINIMUM_CHOICES = 5;
     public @NotNull String getNewRandomBounty(Player holder){
@@ -84,6 +88,9 @@ public class BountyManager {
                         )
         ).collect(Collectors.toList());
         if(choices.size()<BOUNTY_MINIMUM_CHOICES) throw new NotEnoughTargetsException();
+        
+        if(choices.size()<1) throw new NotEnoughTargetsException();
+        
         
         Player choice = choices.get(rand.nextInt(choices.size()));
         
@@ -97,39 +104,44 @@ public class BountyManager {
     
     private String getItemBounty(@NotNull ItemMeta meta){
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        return pdc.get(getItemBountyKey(), PersistentDataType.STRING);
+        String value = pdc.get(getItemBountyKey(), PersistentDataType.STRING);
+        debug("getItemBounty: "+getItemBountyKey().toString()+" = "+(value==null?"null":value)); 
+        return value;
     }
     
     private void removeItemBounty(@NotNull ItemMeta meta){
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        debug("removeItemBounty"); 
         pdc.remove(getItemBountyKey());
         
     }
     
     private void setItemBounty(@NotNull ItemMeta meta, String playerName){
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        debug("setItemBounty: "+getItemBountyKey().toString()+" = "+playerName); 
         pdc.set(getItemBountyKey(), PersistentDataType.STRING, playerName);
     }
     public @Nullable String getItemBounty(ItemStack stack){
-        if(stack==null) return null;
-        if(!stack.hasItemMeta()) return null;
+        if(stack==null) {debug("getItemBounty: null stack"); return null;}
+        if(!stack.hasItemMeta()){debug("getItemBounty: no meta");  return null; }
         ItemMeta meta = stack.getItemMeta();
-        if(meta==null) return null;
+        if(meta==null){debug("getItemBounty: null meta");  return null;}
         return getItemBounty(meta);
         
     }
     public void removeItemBounty(ItemStack stack){
-        if(stack==null) return;
-        if(!stack.hasItemMeta()) return;
+        if(stack==null)  {debug("removeItemBounty: null stack"); return ;}
+        if(!stack.hasItemMeta())  {debug("removeItemBounty: no meta"); return ;}
         ItemMeta meta = stack.getItemMeta();
-        if(meta==null) return;
+        if(meta==null)  {debug("removeItemBounty: null meta"); return ;}
         removeItemBounty(meta);
+        stack.setItemMeta(meta);
     }
     public boolean setItemBounty(ItemStack stack, String playerName){
         ItemMeta meta = null;
         if(stack.hasItemMeta()) meta = stack.getItemMeta();
         else meta = Bukkit.getItemFactory().getItemMeta(stack.getType());
-        if(meta==null) return false;//material does not support meta (eg: AIR)
+        if(meta==null){debug("setItemBounty: null meta"); return false;}//material does not support meta (eg: AIR)
         
         setItemBounty(meta, playerName);
         stack.setItemMeta(meta);

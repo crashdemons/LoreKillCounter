@@ -10,6 +10,7 @@ import com.github.crashdemons.lorekillcounter.counters.CounterAddResult;
 import com.github.crashdemons.lorekillcounter.counters.CounterBaseType;
 import com.github.crashdemons.lorekillcounter.counters.CounterManager;
 import com.github.crashdemons.lorekillcounter.counters.CounterType;
+import com.github.crashdemons.lorekillcounter.counters.EntityBeheadCounterType;
 import com.github.crashdemons.lorekillcounter.counters.EntitySlainCounterType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,6 +26,14 @@ import org.bukkit.entity.Player;
 public class CounterCommandExecutor implements CommandExecutor {
     private boolean addEntityCounter(CommandSender sender, Player target, String entityNameData){
         CounterType exType = EntitySlainCounterType.fromEntityName(entityNameData);
+        if(exType==null || exType.baseType == CounterBaseType.INVALID){
+            sender.sendMessage(ChatColor.RED + "Invalid entity type "+entityNameData);
+            return false;
+        }
+        return addCounterEx( sender,  target, exType);
+    }
+    private boolean addEntityHeadCounter(CommandSender sender, Player target, String entityNameData){
+        CounterType exType = EntityBeheadCounterType.fromEntityName(entityNameData);
         if(exType==null || exType.baseType == CounterBaseType.INVALID){
             sender.sendMessage(ChatColor.RED + "Invalid entity type "+entityNameData);
             return false;
@@ -143,6 +152,9 @@ public class CounterCommandExecutor implements CommandExecutor {
             switch(type){
                 case ENTITIES_SLAIN:
                     addEntityCounter(sender,target,data);
+                    return true;
+                case ENTITIES_BEHEADED:
+                    addEntityHeadCounter(sender,target,data);
                     return true;
                 default:
                     sender.sendMessage(ChatColor.RED + "Unsupported extended counter type.");

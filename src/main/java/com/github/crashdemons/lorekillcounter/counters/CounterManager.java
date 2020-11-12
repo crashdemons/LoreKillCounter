@@ -153,7 +153,8 @@ public class CounterManager {
     
     public static CounterType typeFromDisplayName(String name){
         //determine the type of counter on the item
-        CounterType type = EntitySlainCounterType.fromDisplayName(name);
+        CounterType type = EntityBeheadCounterType.fromDisplayName(name);
+        if(type==null) type = EntitySlainCounterType.fromDisplayName(name);
         if(type==null) type = CounterType.fromDisplayName(name);
         return type;
     }
