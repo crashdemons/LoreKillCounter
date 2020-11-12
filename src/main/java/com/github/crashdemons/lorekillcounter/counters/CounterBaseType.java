@@ -6,6 +6,7 @@
 package com.github.crashdemons.lorekillcounter.counters;
 
 import java.util.HashMap;
+import org.bukkit.entity.EntityType;
 
 /**
  *
@@ -71,7 +72,7 @@ public enum CounterBaseType {
         if(displayName==null) return this.name();
         return displayName;
     }
-    
+      
     public static CounterBaseType fromDisplayName(String name){
         //determine the type of counter on the item
         for(CounterBaseType type : CounterBaseType.values())   //check all counters for a matching name

@@ -7,6 +7,7 @@ package com.github.crashdemons.lorekillcounter.counters;
 
 import java.text.MessageFormat;
 import java.util.Objects;
+import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -25,6 +26,26 @@ public class CounterType {
     public CounterType(CounterBaseType type, String extendedData){
         this.baseType=type;
         this.extendedData=extendedData;
+    }
+    
+    
+    protected static String capitalizeString(String string) {
+        char[] chars = string.toLowerCase().toCharArray();
+        boolean found = false;
+        for (int i = 0; i < chars.length; i++) {
+          if (!found && Character.isLetter(chars[i])) {
+            chars[i] = Character.toUpperCase(chars[i]);
+            found = true;
+          } else if (Character.isWhitespace(chars[i]) || chars[i]=='.' || chars[i]=='\'') { // You can add other chars here
+            found = false;
+          }
+        }
+        return String.valueOf(chars);
+    }
+    
+    protected static String getFriendlyEntityName(EntityType type){
+        String name = type.name().replace('_', ' ');
+        return capitalizeString(name);
     }
     
     protected static String formatDisplayName(CounterBaseType baseType, String extendedData){
