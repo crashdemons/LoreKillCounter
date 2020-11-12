@@ -30,7 +30,37 @@ import org.jetbrains.annotations.NotNull;
 public class CounterManager {
     private CounterManager(){}
     
-    
+    public static boolean hasCounter(List<String> lore, CounterType type){
+        for(int i=0;i<lore.size();i++){
+            Counter counter = Counter.fromLoreLine(lore.get(i));
+            if(counter!=null && counter.isValid() && counter.getType().equals(type)) return true;
+        }
+        return false;
+    }
+    public static boolean hasCounter(ItemStack stack, CounterType type){
+        if(stack==null) return false;
+        ItemMeta meta = stack.getItemMeta();//spigot already checks if null and makes a new version - otherwise it returns a clone - should be safe to use directly!
+        if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());//unnecessary unless implementation differs from spigot-api
+        if(meta==null) return false;//Item does not support any meta (eg: AIR)
+        List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());
+        boolean result = hasCounter(lore,type);
+        return result;
+    }
+    public static Counter getFirstCounter(List<String> lore, CounterType type){
+        for(int i=0;i<lore.size();i++){
+            Counter counter = Counter.fromLoreLine(lore.get(i));
+            if(counter!=null && counter.isValid() && counter.getType().equals(type)) return counter;
+        }
+        return null;
+    }
+    public static Counter getFirstCounter(ItemStack stack, CounterType type){
+        if(stack==null) return null;
+        ItemMeta meta = stack.getItemMeta();//spigot already checks if null and makes a new version - otherwise it returns a clone - should be safe to use directly!
+        if(meta==null) meta = Bukkit.getItemFactory().getItemMeta(stack.getType());//unnecessary unless implementation differs from spigot-api
+        if(meta==null) return null;//Item does not support any meta (eg: AIR)
+        List<String> lore = (meta.hasLore()? meta.getLore() : new ArrayList<>());
+        return getFirstCounter(lore,type);
+    }
     
     public static boolean applyCounterOperation(List<String> lore, CounterOperation operation){
         for(int i=0;i<lore.size();i++){
@@ -123,7 +153,8 @@ public class CounterManager {
     
     public static CounterType typeFromDisplayName(String name){
         //determine the type of counter on the item
-        CounterType type = EntitySlainCounterType.fromDisplayName(name);
+        CounterType type = EntityBeheadCounterType.fromDisplayName(name);
+        if(type==null) type = EntitySlainCounterType.fromDisplayName(name);
         if(type==null) type = CounterType.fromDisplayName(name);
         return type;
     }
@@ -150,6 +181,20 @@ public class CounterManager {
     }
     
     private static final double MARKSMAN_DISTANCE_SQUARED = 40*40;//50*50 is sniper duel;
+    
+    
+    public static List<CounterType> typeFromBountyDeath(Player holder, ItemStack s, LivingEntity e){
+        ArrayList<CounterType> types = new ArrayList<>();
+        //Counter counter = CounterBaseType.BOUNTY_POINTS.createType()
+        if(!(e instanceof Player)) return types;
+        if(!CounterManager.hasCounter(s, CounterBaseType.BOUNTY_POINTS.createType())) return types;
+        String bounty = LoreKillCounter.instance.bountyManager.getItemBounty(s);
+        if(bounty!=null && e.getName().equalsIgnoreCase(bounty)){
+            LoreKillCounter.instance.bountyManager.onBountyComplete(holder, s);
+            types.add(BOUNTY_POINTS.createType());
+        }
+        return types;
+    }
     
     public static List<CounterType> typeFromEntityDeath(LivingEntity e){
         ArrayList<CounterType> types = new ArrayList<>();

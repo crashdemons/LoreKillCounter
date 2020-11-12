@@ -5,6 +5,7 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
+import com.github.crashdemons.lorekillcounter.bounties.BountyManager;
 import com.github.crashdemons.lorekillcounter.integrations.PHListener;
 import com.github.crashdemons.lorekillcounter.integrations.PlayerHeadsSupport;
 import org.bukkit.event.Listener;
@@ -16,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class LoreKillCounter extends JavaPlugin implements Listener{
     public static LoreKillCounter instance = null;
+    public BountyManager bountyManager = null;
     
     public int getLoreCap(){
         int cap = getConfig().getInt("lore-line-cap");
@@ -27,6 +29,7 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
     @Override
     public void onLoad(){
         instance = this;
+        bountyManager = new BountyManager(this);
     }
     
     
@@ -43,6 +46,11 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
         
         getCommand("LoreKillCounter").setExecutor(new CounterCommandExecutor());
         getCommand("LoreKillCounter").setTabCompleter(new CounterTabCompleter());
+        
+        
+        getCommand("LoreKillCounterBounty").setExecutor(new BountyCommandExecutor());
+        getCommand("LoreKillCounterBounty").setTabCompleter(new BountyTabCompleter());
+        
         
         getServer().getPluginManager().registerEvents(new CounterListener(), this);
         getLogger().info("Enabled.");

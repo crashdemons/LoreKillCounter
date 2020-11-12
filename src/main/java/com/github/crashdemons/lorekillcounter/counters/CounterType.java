@@ -5,6 +5,7 @@
  */
 package com.github.crashdemons.lorekillcounter.counters;
 
+import com.github.crashdemons.lorekillcounter.LoreKillCounter;
 import java.text.MessageFormat;
 import java.util.Objects;
 import org.bukkit.entity.EntityType;
@@ -49,11 +50,19 @@ public class CounterType {
     }
     
     protected static String formatDisplayName(CounterBaseType baseType, String extendedData){
-        if(!baseType.isExtended()) return baseType.getDisplayName();
-        return MessageFormat.format(baseType.getDisplayName(), extendedData);
+        try{
+            if(!baseType.isExtended()) return baseType.getDisplayName();
+            return MessageFormat.format(baseType.getDisplayName(), extendedData);
+        }catch(Exception e){
+            System.out.println("***baseType "+(baseType==null?"null":baseType));
+            System.out.println("***extended "+(extendedData==null?"null":extendedData));
+            System.out.println("***dispName "+(baseType==null?"NPE":baseType.getDisplayName()));
+            throw e;
+        }
     }
     
     public String getDisplayName(){
+        //System.out.println("***"+this.getClass().getSimpleName());
         return formatDisplayName(baseType, extendedData);
     }
     

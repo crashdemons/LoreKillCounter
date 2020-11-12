@@ -88,6 +88,8 @@ public class Counter {
             return null;//invalid count string - can't be a counter
         }
         
+        EntityBeheadCounterType beheadCounter = EntityBeheadCounterType.fromDisplayName(name);
+        if(beheadCounter!=null) return new Counter(beheadCounter, count);
         EntitySlainCounterType slainCounter = EntitySlainCounterType.fromDisplayName(name);
         if(slainCounter!=null) return new Counter(slainCounter, count);
         CounterType counterType = CounterType.fromDisplayName(name);
