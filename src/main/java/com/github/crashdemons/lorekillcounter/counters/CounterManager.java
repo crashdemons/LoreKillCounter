@@ -186,6 +186,11 @@ public class CounterManager {
         if(e instanceof Player) types.add(PLAYER_HEADS.createType());
         else types.add(MOB_HEADS.createType());
         types.add(ALL_HEADS.createType());
+        
+        EntityType type = e.getType();//notnull
+        types.add(new EntityBeheadCounterType(type));
+        
+        
         return types;
     }
 }
