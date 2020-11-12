@@ -32,7 +32,8 @@ public class EntitySlainCounterType extends CounterType {
     
     private static String getFriendlyEntityName(EntityType type){
         String name = type.name().replace('_', ' ');
-        return name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+        name = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+        return name;
     }
     
     @Nullable
