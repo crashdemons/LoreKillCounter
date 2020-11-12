@@ -30,6 +30,7 @@ public enum CounterBaseType {
     ORES_MINED("Ores Mined","ores","om"),
     
     ENTITIES_SLAIN(true, "{0}s Slain", "entities","es"),
+    ENTITIES_BEHEADED(true, "{0}s Beheaded", "eh","ex"),
     
     ;
     

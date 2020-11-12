@@ -13,31 +13,31 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author crashdemons (crashenator at gmail.com)
  */
-public class EntitySlainCounterType extends EntitySpecificCounterType {
+public class EntityBeheadCounterType extends EntitySpecificCounterType {
     
     private final static HashMap<String,EntityType> displayNameToEntity = new HashMap<String,EntityType>();
     static{
         for(EntityType type : EntityType.values()){
-            String dispName = formatDisplayName(CounterBaseType.ENTITIES_SLAIN,getFriendlyEntityName(type));
+            String dispName = formatDisplayName(CounterBaseType.ENTITIES_BEHEADED,getFriendlyEntityName(type));
             displayNameToEntity.put(dispName.toUpperCase(), type);
         }
     }
     
     
-    public EntitySlainCounterType(EntityType type){
-        super(CounterBaseType.ENTITIES_SLAIN, type);
+    public EntityBeheadCounterType(EntityType type){
+        super(CounterBaseType.ENTITIES_BEHEADED, type);
     }
     
     
     @Nullable
-    public static EntitySlainCounterType fromDisplayName(String displayName){
+    public static EntityBeheadCounterType fromDisplayName(String displayName){
         EntityType type = displayNameToEntity.get(displayName.toUpperCase());
         if(type==null) return null;
-        return new EntitySlainCounterType(type);
+        return new EntityBeheadCounterType(type);
     }
     
     @Nullable
-    public static EntitySlainCounterType fromEntityName(String entityName){
+    public static EntityBeheadCounterType fromEntityName(String entityName){
         EntityType type = null;
         try{
             type = EntityType.valueOf(entityName.toUpperCase());
@@ -46,6 +46,6 @@ public class EntitySlainCounterType extends EntitySpecificCounterType {
         }
         if(type==null) return null;
         if(!type.isAlive()) return null;
-        return new EntitySlainCounterType(type);
+        return new EntityBeheadCounterType(type);
     }
 }
