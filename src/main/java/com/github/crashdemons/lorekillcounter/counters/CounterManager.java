@@ -149,7 +149,7 @@ public class CounterManager {
         return types;
     }
     
-    private static final double SNIPER_DUEL_DISTANCE_SQUARED = 50*50;
+    private static final double MARKSMAN_DISTANCE_SQUARED = 40*40;//50*50 is sniper duel;
     
     public static List<CounterType> typeFromEntityDeath(LivingEntity e){
         ArrayList<CounterType> types = new ArrayList<>();
@@ -170,7 +170,7 @@ public class CounterManager {
             Location locA = e.getLocation();
             Location locB = killer.getLocation();
             try{
-                if(locA.distanceSquared(locB)>=SNIPER_DUEL_DISTANCE_SQUARED){
+                if(locA.distanceSquared(locB)>=MARKSMAN_DISTANCE_SQUARED){
                     types.add(MARKSMAN_KILLS.createType());
                 }
             }catch(Exception ex){ }//different dimension
