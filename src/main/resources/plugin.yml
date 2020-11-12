@@ -10,10 +10,17 @@ website: https://github.com/crashdemons
 softdepend: [PlayerHeads,MiningTrophies]
 
 commands:
+  LoreKillCounterBounty:
+    description: Manage a player's bounty counter status
+    usage: /<command> [reroll]
+    aliases: [bounty,counterbounty]
+    permission: lorekillcounter.bounty.command
+      
   LoreKillCounter:
     description: Add or remove a couunter to an item
     usage: /<command> add/remove [type] [user]
     aliases: [lkc,counter]
+    permission: lorekillcounter.modify
     
 permissions:
   lorekillcounter.*:
@@ -22,9 +29,21 @@ permissions:
     children:
       lorekillcounter.counted: true
       lorekillcounter.modify: true
+      lorekillcounter.bounty.command: true
 #  lorekillcounter.config.reload:
 #    description: Allows user to reload configs
 #    default: op
+
+  lorekillcounter.bounty.command:
+    description: Allows viewing the bounty county status
+    default: true
+  lorekillcounter.bounty.reset:
+    description: Allows resetting your own bounty county (at a price) to a new random person
+    default: true
+  lorekillcounter.bounty.exempt:
+    description: Makes you exempt from being chosen for bounties
+    default: op
+
   lorekillcounter.modify:
     description: Allows modifying the counters on items with
     default: op

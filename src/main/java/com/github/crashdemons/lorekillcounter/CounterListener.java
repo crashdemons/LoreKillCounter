@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -52,6 +53,10 @@ public class CounterListener implements Listener {
         //getLogger().info(" killer player");
         
         List<CounterType> deathTypes = CounterManager.typeFromEntityDeath(killed);
+        
+        
+        ItemStack stack = killer.getInventory().getItemInMainHand();
+        deathTypes.addAll(CounterManager.typeFromBountyDeath(killer,stack,killed));
         
         
         //getLogger().info("deathType = "+deathType);
