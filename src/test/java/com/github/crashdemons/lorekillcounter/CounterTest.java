@@ -150,14 +150,21 @@ public class CounterTest {
         assertFalse(CounterBaseType.ENTITIES_SLAIN.createType().equals( new CounterType(CounterBaseType.ENTITIES_SLAIN,"X")));
         assertFalse((new CounterType(CounterBaseType.ENTITIES_SLAIN,"X")).equals(CounterBaseType.ENTITIES_SLAIN.createType()));
         
-        assertEquals(new CounterType(CounterBaseType.ENTITIES_SLAIN,"Trader llama"),new EntitySlainCounterType(EntityType.TRADER_LLAMA));
+        CounterType a = new CounterType(CounterBaseType.ENTITIES_SLAIN,"Trader Llama");
+        CounterType b = new EntitySlainCounterType(EntityType.TRADER_LLAMA);
+        
+        assertTrue(a.equals(b));
+        assertTrue(b.equals(a));
+        
+        
+        assertEquals(a,b);
     }
     
     
     @Test
     public void testDisplayName() {
         CounterType type = new EntitySlainCounterType(EntityType.TRADER_LLAMA);
-        assertEquals("Trader llamas Slain",type.getDisplayName());
+        assertEquals("Trader Llamas Slain",type.getDisplayName());
         
         type = new CounterType(CounterBaseType.ENTITIES_SLAIN,"xYz AbC");
         assertEquals("xYz AbCs Slain",type.getDisplayName());
