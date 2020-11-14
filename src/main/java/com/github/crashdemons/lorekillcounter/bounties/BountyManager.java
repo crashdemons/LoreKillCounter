@@ -8,6 +8,8 @@ package com.github.crashdemons.lorekillcounter.bounties;
 import com.github.crashdemons.lorekillcounter.LoreKillCounter;
 import com.github.crashdemons.lorekillcounter.counters.CounterBaseType;
 import com.github.crashdemons.lorekillcounter.counters.CounterManager;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -78,11 +80,22 @@ public class BountyManager {
     
     private void debug(String s){}
     
-    private static final float BOUNTY_MINIMUM_CHOICES = 5;
+    public static String getIP(Player player){
+        if(player==null) return null;
+        InetSocketAddress addr = player.getAddress();
+        if(addr==null) return null;
+        InetAddress addr2 = addr.getAddress();
+        if(addr2==null) return null;
+        return addr2.getHostAddress();
+    }
+    
+    
+    private static final float BOUNTY_MINIMUM_CHOICES = 10;
     public @NotNull String getNewRandomBounty(Player holder){
         List<? extends Player> choices = Bukkit.getOnlinePlayers().stream().filter(
                 (player)->( 
                             (!holder.getUniqueId().equals(player.getUniqueId())) && 
+                            (!getIP(holder).equals(getIP(player))) &&
                             holder.canSee(holder) && 
                             !player.hasPermission("lorekillcounter.bounty.exempt")
                         )
