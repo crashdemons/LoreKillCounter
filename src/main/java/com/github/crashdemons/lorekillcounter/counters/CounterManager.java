@@ -128,6 +128,10 @@ public class CounterManager {
             //getLogger().info(" lore counter type = "+counter.getType() + " vs "+deathType);
             if(types.contains(counter.getType())){//the lore line is the same type of counter as this kill
                 counter.increment();
+                if(counter.getType().baseType==CounterBaseType.BOUNTY_POINTS){//add 3 instead of 1
+                    counter.increment();
+                    counter.increment();
+                }
             }
             return counter;
         };
