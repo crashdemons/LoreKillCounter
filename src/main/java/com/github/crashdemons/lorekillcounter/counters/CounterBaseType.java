@@ -32,7 +32,7 @@ public enum CounterBaseType {
     ENTITIES_SLAIN(true, "{0}s Slain", "entities","es"),
     ENTITIES_BEHEADED(true, "{0}s Beheaded", "eh","ex"),
     
-    BOUNTY_POINTS("Bounty Points","bs","bounties");
+    BOUNTY_POINTS("Bounty Points","bs","bk","bp","bounties");
     
     ;
     
