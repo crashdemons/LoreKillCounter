@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
  * @author crashdemons (crashenator at gmail.com)
  */
 public class CounterManager {
+
     private CounterManager(){}
     
     public static boolean hasCounter(List<String> lore, CounterType type){
@@ -187,7 +188,7 @@ public class CounterManager {
     private static final double MARKSMAN_DISTANCE_SQUARED = 40*40;//50*50 is sniper duel;
     
     
-    public static List<CounterType> typeFromBountyDeath(Player holder, ItemStack s, LivingEntity e){
+    /*public static List<CounterType> typeFromBountyDeath(Player holder, ItemStack s, LivingEntity e){
         ArrayList<CounterType> types = new ArrayList<>();
         //Counter counter = CounterBaseType.BOUNTY_POINTS.createType()
         if(!(e instanceof Player)) return types;
@@ -198,7 +199,7 @@ public class CounterManager {
             types.add(BOUNTY_POINTS.createType());
         }
         return types;
-    }
+    }*/
     
     public static List<CounterType> typeFromEntityDeath(LivingEntity e){
         ArrayList<CounterType> types = new ArrayList<>();
@@ -240,6 +241,13 @@ public class CounterManager {
         types.add(new EntityBeheadCounterType(type));
         
         
+        return types;
+    }
+    
+    public static List<CounterType> typeFromBlockTrophyDrop(Block block) {
+        ArrayList<CounterType> types = new ArrayList<>();
+        if(block.getType().isAir()) return types;
+        types.add(MINING_TROPHIES.createType());
         return types;
     }
 }

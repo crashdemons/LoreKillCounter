@@ -29,6 +29,8 @@ public enum CounterBaseType {
     BLOCKS_MINED("Blocks Mined","blocks","bm"),
     ORES_MINED("Ores Mined","ores","om"),
     
+    MINING_TROPHIES("Trophies Mined","mt"),
+    
     ENTITIES_SLAIN(true, "{0}s Slain", "entities","es"),
     ENTITIES_BEHEADED(true, "{0}s Beheaded", "eh","ex"),
     

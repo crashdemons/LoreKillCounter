@@ -6,6 +6,8 @@
 package com.github.crashdemons.lorekillcounter;
 
 import com.github.crashdemons.lorekillcounter.bounties.BountyManager;
+import com.github.crashdemons.lorekillcounter.integrations.MTListener;
+import com.github.crashdemons.lorekillcounter.integrations.MiningTrophiesSupport;
 import com.github.crashdemons.lorekillcounter.integrations.PHListener;
 import com.github.crashdemons.lorekillcounter.integrations.PlayerHeadsSupport;
 import org.bukkit.event.Listener;
@@ -43,13 +45,17 @@ public class LoreKillCounter extends JavaPlugin implements Listener{
             getLogger().info("PlayerHeads support detected");
             getServer().getPluginManager().registerEvents(new PHListener(this), this);
         }
+        if(MiningTrophiesSupport.isPresent()){
+            getLogger().info("MiningTrophies support detected");
+            getServer().getPluginManager().registerEvents(new MTListener(this), this);
+        }
         
         getCommand("LoreKillCounter").setExecutor(new CounterCommandExecutor());
         getCommand("LoreKillCounter").setTabCompleter(new CounterTabCompleter());
         
         
-        getCommand("LoreKillCounterBounty").setExecutor(new BountyCommandExecutor());
-        getCommand("LoreKillCounterBounty").setTabCompleter(new BountyTabCompleter());
+        /*getCommand("LoreKillCounterBounty").setExecutor(new BountyCommandExecutor());
+        getCommand("LoreKillCounterBounty").setTabCompleter(new BountyTabCompleter());*/
         
         
         getServer().getPluginManager().registerEvents(new CounterListener(), this);

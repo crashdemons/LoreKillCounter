@@ -55,8 +55,8 @@ public class CounterListener implements Listener {
         List<CounterType> deathTypes = CounterManager.typeFromEntityDeath(killed);
         
         
-        ItemStack stack = killer.getInventory().getItemInMainHand();
-        deathTypes.addAll(CounterManager.typeFromBountyDeath(killer,stack,killed));
+        /*ItemStack stack = killer.getInventory().getItemInMainHand();
+        deathTypes.addAll(CounterManager.typeFromBountyDeath(killer,stack,killed));*/
         
         
         //getLogger().info("deathType = "+deathType);
