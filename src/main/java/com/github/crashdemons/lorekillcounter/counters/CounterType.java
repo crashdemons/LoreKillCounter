@@ -5,9 +5,9 @@
  */
 package com.github.crashdemons.lorekillcounter.counters;
 
-import com.github.crashdemons.lorekillcounter.LoreKillCounter;
 import java.text.MessageFormat;
 import java.util.Objects;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,6 +44,10 @@ public class CounterType {
         return String.valueOf(chars);
     }
     
+    protected static String getFriendlyMaterialName(Material type){
+        String name = type.name().replace('_', ' ');
+        return capitalizeString(name);
+    }
     protected static String getFriendlyEntityName(EntityType type){
         String name = type.name().replace('_', ' ');
         return capitalizeString(name);

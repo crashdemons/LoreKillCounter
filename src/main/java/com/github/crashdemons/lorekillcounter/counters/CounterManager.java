@@ -160,6 +160,7 @@ public class CounterManager {
         //determine the type of counter on the item
         CounterType type = EntityBeheadCounterType.fromDisplayName(name);
         if(type==null) type = EntitySlainCounterType.fromDisplayName(name);
+        if(type==null) type = BlockBrokenCounterType.fromDisplayName(name);
         if(type==null) type = CounterType.fromDisplayName(name);
         return type;
     }
@@ -180,7 +181,9 @@ public class CounterManager {
         Material mat = b.getType();
         if(mat==null || mat==Material.AIR) return types;//no mining of nothing please!
         if(isOre(mat)) types.add(ORES_MINED.createType());
+        types.add(new BlockBrokenCounterType(mat));
         types.add(BLOCKS_MINED.createType());
+        //types.add(BLOCKS_BROKEN.
         
         return types;
     }

@@ -92,6 +92,11 @@ public class Counter {
         if(beheadCounter!=null) return new Counter(beheadCounter, count);
         EntitySlainCounterType slainCounter = EntitySlainCounterType.fromDisplayName(name);
         if(slainCounter!=null) return new Counter(slainCounter, count);
+        
+        BlockBrokenCounterType blockCounter = BlockBrokenCounterType.fromDisplayName(name);
+        if(blockCounter!=null) return new Counter(blockCounter, count);
+        
+        
         CounterType counterType = CounterType.fromDisplayName(name);
         if(counterType!=null) return new Counter(counterType, count);
         return null;

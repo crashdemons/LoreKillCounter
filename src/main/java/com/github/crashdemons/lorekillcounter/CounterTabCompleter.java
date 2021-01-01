@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -42,7 +43,18 @@ public class CounterTabCompleter implements TabCompleter{
                 if(numToComplete==2) return Stream.of( CounterBaseType.values() ).filter(CounterBaseType::isValid).filter(CounterBaseType::isBasic).map(CounterBaseType::name).collect(Collectors.toList());
             }else if(args[0].equalsIgnoreCase("addextended") || args[0].equalsIgnoreCase("addex")){
                 if(numToComplete==2) return Stream.of( CounterBaseType.values() ).filter(CounterBaseType::isExtended).map(CounterBaseType::name).collect(Collectors.toList());
-                if(numToComplete==3) return Stream.of( EntityType.values() ).filter(EntityType::isAlive).map(EntityType::name).collect(Collectors.toList());
+                if(numToComplete==3){//type-specific counter
+                    String counterExTypeName = args[1];
+                    CounterBaseType baseType;
+                    try{
+                        baseType = CounterBaseType.valueOf(counterExTypeName);
+                    }catch(Exception e){
+                        System.out.println("invalid counter type "+counterExTypeName);
+                        return new ArrayList<>();
+                    }
+                    if(baseType == CounterBaseType.BLOCKS_BROKEN) return Stream.of( Material.values() ).filter(Material::isBlock).map(Material::name).collect(Collectors.toList());
+                    return Stream.of( EntityType.values() ).filter(EntityType::isAlive).map(EntityType::name).collect(Collectors.toList());
+                }
             }else if(args[0].equalsIgnoreCase("clear") || args[0].equalsIgnoreCase("remove")){
                 return new ArrayList<>();
             }

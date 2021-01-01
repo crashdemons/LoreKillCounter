@@ -5,6 +5,7 @@
  */
 package com.github.crashdemons.lorekillcounter;
 
+import com.github.crashdemons.lorekillcounter.counters.BlockBrokenCounterType;
 import com.github.crashdemons.lorekillcounter.counters.Counter;
 import com.github.crashdemons.lorekillcounter.counters.CounterAddResult;
 import com.github.crashdemons.lorekillcounter.counters.CounterBaseType;
@@ -24,6 +25,14 @@ import org.bukkit.entity.Player;
  * @author crashdemons (crashenator at gmail.com)
  */
 public class CounterCommandExecutor implements CommandExecutor {
+    private boolean addBlockCounter(CommandSender sender, Player target, String blockName){
+        CounterType exType = BlockBrokenCounterType.fromBlockName(blockName);
+        if(exType==null || exType.baseType == CounterBaseType.INVALID){
+            sender.sendMessage(ChatColor.RED + "Invalid block type "+blockName);
+            return false;
+        }
+        return addCounterEx( sender,  target, exType);
+    }
     private boolean addEntityCounter(CommandSender sender, Player target, String entityNameData){
         CounterType exType = EntitySlainCounterType.fromEntityName(entityNameData);
         if(exType==null || exType.baseType == CounterBaseType.INVALID){
@@ -155,6 +164,9 @@ public class CounterCommandExecutor implements CommandExecutor {
                     return true;
                 case ENTITIES_BEHEADED:
                     addEntityHeadCounter(sender,target,data);
+                    return true;
+                case BLOCKS_BROKEN:
+                    addBlockCounter(sender,target,data);
                     return true;
                 default:
                     sender.sendMessage(ChatColor.RED + "Unsupported extended counter type.");
