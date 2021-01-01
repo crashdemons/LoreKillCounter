@@ -16,9 +16,8 @@ We've recently moved to using Maven! If you used build.xml or a Netbeans Project
 
 # API
 
-You can build your own plugins against MiningTrophies by including the following in your configuration.
+You can build your own plugins against LoreKillCounter by including the following in your configuration.
 
-Class/API documention is available [here](https://crashdemons.github.io/LoreKillCounter/).
 
 Respositories:
 
